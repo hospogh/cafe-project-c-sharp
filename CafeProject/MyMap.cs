@@ -14,9 +14,12 @@ namespace CafeProject
         allCommands,
         exit
     }
-    static class MyMap
+    public static class MyMap
     {
         static private Command[] commands = { Command.search, Command.save, Command.allCommands, Command.exit };
+
+        private static List<Building> allBuildings = new List<Building>();
+        public static List<Building> AllBuildings { get { return allBuildings; } }
 
         static public void MyConsole()
         {

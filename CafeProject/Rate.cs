@@ -32,9 +32,9 @@ namespace CafeProject
         public Rate UserRate { get; private set; }
         public String UserReview { get; private set; }
 
-        public UserRating(String name, Rate rate, String review = "")
+        public UserRating(User user, Rate rate, String review = "")       /**/
         {
-            this.Name = name;
+            this.Name = user.Name;
             this.UserRate = rate;
             this.UserReview = review;
         }
@@ -52,34 +52,49 @@ namespace CafeProject
     public class AllRates
     {
         public List<UserRating> Ratings { get; private set; }
-        public int CountOf1 { get; private set; }
-        public int CountOf2 { get; private set; }
-        public int CountOf3 { get; private set; }
-        public int CountOf4 { get; private set; }
-        public int CountOf5 { get; private set; }
-        public int CountOfRaters { get { return CountOf1 + CountOf2 + CountOf3 + CountOf4 + CountOf5; } }
-        public double RatingAverage { get { return (double)(CountOf1 + 2 * CountOf2 + 3 * CountOf3 + 4 * CountOf4 + 5 * CountOf5) / CountOfRaters; } }
+        public int[] CountsOfRates { get; set; }
+        public int CountOfRaters
+        {
+            get
+            {
+                int count = 0;
+                foreach (int c in CountsOfRates)
+                {
+                    count += c;
+                }
+                return count;
+            }
+        }
+        public double RatingAverage
+        {
+            get
+            {
+                int s = 0;
+                for (int i = 1; i < CountsOfRates.Length; i++)
+                {
+                    s += CountsOfRates[i] * i;
+                }
+                return s / CountOfRaters;
+            }
+        }
 
         //constructors
         public AllRates()
         {
-            this.CountOf1 = 0;
-            this.CountOf2 = 0;
-            this.CountOf3 = 0;
-            this.CountOf4 = 0;
-            this.CountOf5 = 0;
+            this.CountsOfRates = new int[6];
+            Ratings = new List<UserRating>();
         }
-        public AllRates(List<UserRating> rates) : base()
+        public AllRates(List<UserRating> rates) : base()        // ????
         {
             foreach (var r in rates)
             {
                 switch (r.UserRate)
                 {
-                    case Rate.one: CountOf1++; break;
-                    case Rate.two: CountOf2++; break;
-                    case Rate.three: CountOf3++; break;
-                    case Rate.four: CountOf4++; break;
-                    case Rate.five: CountOf5++; break;
+                    case Rate.one: CountsOfRates[1]++; break;
+                    case Rate.two: CountsOfRates[2]++; break;
+                    case Rate.three: CountsOfRates[3]++; break;
+                    case Rate.four: CountsOfRates[4]++; break;
+                    case Rate.five: CountsOfRates[5]++; break;
                 }
             }
         }
@@ -87,30 +102,29 @@ namespace CafeProject
         //methods
         public void AddRate(UserRating rate)
         {
-            if (Ratings == null)
-            {
-                this.Ratings = new List<UserRating>();
-            }
+            //if (Ratings == null)
+            //{
+            //    this.Ratings = new List<UserRating>();
+            //}
             Ratings.Add(rate);
             switch (rate.UserRate)
             {
-                case Rate.one: CountOf1++; break;
-                case Rate.two: CountOf2++; break;
-                case Rate.three: CountOf3++; break;
-                case Rate.four: CountOf4++; break;
-                case Rate.five: CountOf5++; break;
+                 case Rate.one: CountsOfRates[1]++; break;
+                 case Rate.two: CountsOfRates[2]++; break;
+                 case Rate.three: CountsOfRates[3]++; break;
+                 case Rate.four: CountsOfRates[4]++; break;
+                 case Rate.five: CountsOfRates[5]++; break;
             }
         }
         public override string ToString()
         {
-            return "Rating: " + RatingAverage + "\nCount Of 1: " + CountOf1 + "\nCount Of 2: " + CountOf2 + "\nCount Of 3: " + CountOf3 + "\nCount Of 4: " + CountOf4 + "\nCount Of 5: " + CountOf5;
+            return "Rating: " + RatingAverage + "\nCount Of 1: " + CountsOfRates[1] + "\nCount Of 2: " + CountsOfRates[2] + "\nCount Of 3: " + CountsOfRates[3] + "\nCount Of 4: " + CountsOfRates[4] + "\nCount Of 5: " + CountsOfRates[5];
         }
         public void Print()
         {
-            Console.WriteLine("Rating: {0}\tcountOf1:{1} countOf2:{2} countOf3:{3} countOf4:{4} countOf5:{5}", RatingAverage, CountOf1, CountOf2, CountOf3, CountOf4, CountOf5);
+            Console.WriteLine("Rating: {0}\tcountOf1:{1} countOf2:{2} countOf3:{3} countOf4:{4} countOf5:{5}", RatingAverage, CountsOfRates[1], CountsOfRates[2], CountsOfRates[3], CountsOfRates[4], CountsOfRates[5]);
             foreach (var rate in Ratings)
             {
-
                 rate.Print();
             }
         }

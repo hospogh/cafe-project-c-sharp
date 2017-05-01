@@ -22,8 +22,9 @@ namespace CafeProject
 
         public void Save(Building b)
         {
-            if (this.Saved == null) { Saved = new List<Building>(); }
-            this.Saved.Add(b);
+            //if (this.Saved == null) { Saved = new List<Building>(); }
+            if(this.Saved.IndexOf(b) == -1)
+                this.Saved.Add(b);
         }
     }
 }
