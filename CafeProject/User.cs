@@ -13,8 +13,9 @@ namespace CafeProject
         public List<Building> Saved { get; set; }
         public List<Building> UserSearches;
 
-        public User(string name)
+        public User(string name, string email)
         {
+            this.Email = email;
             this.Name = name;
             Saved = new List<Building>();
             UserSearches = new List<Building>();
@@ -22,7 +23,6 @@ namespace CafeProject
 
         public void Save(Building b)
         {
-            //if (this.Saved == null) { Saved = new List<Building>(); }
             if(this.Saved.IndexOf(b) == -1)
                 this.Saved.Add(b);
         }

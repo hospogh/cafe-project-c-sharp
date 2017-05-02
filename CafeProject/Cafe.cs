@@ -45,6 +45,7 @@ namespace CafeProject
         private Boolean IsOpen()
         {
                 DateTime now = DateTime.Now;
+
                 //Time nowTime = new Time(now.Hour, now.Minute);
                 //int day;
                 //switch (now.DayOfWeek)
@@ -93,9 +94,9 @@ namespace CafeProject
                 return false;
         }
 
-        public override List<Building> Nearby(List<Building> allCafes)
+        public override List<Building> Nearby()
         {
-            return base.Nearby(AllCafes);
+            return base.Nearby();
         }
         public void Print()
         {
@@ -108,11 +109,6 @@ namespace CafeProject
         public override double Directions(Building building)
         {
             return base.Directions(building);
-        }
-
-        public override double Directions(Building building1, Building building2)
-        {
-            return base.Directions(building1, building2);
         }
     }
 }

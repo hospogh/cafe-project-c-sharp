@@ -26,6 +26,7 @@ namespace CafeProject
             //op[0] = new OpenTimes(DayOfWeek.Tuesday, "10:00", "24:00");
             //Cafe myCafe = new Cafe("Big Book", new Address("a", "a", "ak", "k"), new System.Device.Location.GeoCoordinate(23.12, 21.21), op, "321321321321", "bigBook.am");
             //myCafe.Print();
+            Console.WriteLine(typeof(DayOfWeek));
         }
     }
 }

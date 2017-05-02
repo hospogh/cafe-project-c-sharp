@@ -24,7 +24,7 @@ namespace CafeProject
         static public void MyConsole()
         {
             Console.WriteLine("User Name: ");
-            User myUser = new User(Console.ReadLine());
+            //User myUser = new User(Console.ReadLine());
             Console.WriteLine("=======================================================================================================");
             Console.WriteLine("Console Name: AnnManЯ");
             Console.WriteLine("Every line can contain only one command");
@@ -48,38 +48,46 @@ namespace CafeProject
             Console.WriteLine("=======================================================================================================");
         }
 
-
-        static private void AllComandes() {
-            
+        public static double Directions(Building building1, Building building2)
+        {
+            return building1.Coordinates.GetDistanceTo(building2.Coordinates);
         }
-        
+
+        static private void AllComandes()
+        {
+
+        }
+
 
 
         //Detecting Command in line
-        private static Command CommandInLine(String line)
+        private static Command DetectCommand(String line)
         {
-            foreach (var c in commands)
+            line = line.Trim().Split()[0];
+            foreach (string command in Enum.GetNames(typeof(Command)))
             {
-                if (line.Contains(c.ToString()))
+                if (command.Equals(line))
                 {
-                    return c;
+                    Command.Parse(typeof(Command),command);
+                    
                 }
             }
+            
             return Command.nothing;
         }
-        public static Command DetectCommand(String line)
-        {
-            Command c = CommandInLine(line);
-            if (c != Command.nothing)
-            {
-                if (CommandInLine(line.Replace(c.ToString(), "")) == Command.nothing)
-                {
-                    return c;
-                }
-            }
-            return Command.nothing;
-        }
-        //Prints
+        //public static Command DetectCommand(String line)
+        //{
+        //    Command c = CommandInLine(line);
+        //    if (c != Command.nothing)
+        //    {
+        //        if (MyMap.CommandInLine(line.Replace(c.ToString(), "")) == Command.nothing)
+        //        {
+        //            return c;
+        //        }
+        //    }
+        //    return Command.nothing;
+        //}
+        ////Prints
         static public void PrintAllCommands()
         {
             Console.WriteLine("All commands: {0}, {1}, {2}, {3}", Command.search, Command.save, Command.allCommands, Command.exit);

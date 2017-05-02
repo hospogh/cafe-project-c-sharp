@@ -15,7 +15,7 @@ namespace CafeProject
     //    {
     //        this.Hour = time.Hour;
     //        this.Minute = time.Minute;
-            
+
     //    }
     //    public Time(String time)
     //    {
@@ -75,18 +75,12 @@ namespace CafeProject
         public TimeSpan OpeningTime { get; set; }
         public TimeSpan ClosingingTime { get; set; }
 
-        //public OpenTimes(DayOfWeek day, Time openingtime, Time closingTime)
-        //{
-        //    this.OpeningTime = openingtime;
-        //    this.ClosingingTime = closingTime;
-        //    this.Day = day;
-        //}
         public OpenTimes(DayOfWeek day, String openingtime, String closingTime)
         {
-            string[] openingT =openingtime.Split(':');
-            string[] closingT =openingtime.Split(':');
-            
-            this.OpeningTime = new TimeSpan(int.Parse(openingT[0]),int.Parse(openingT[1]),0);
+            string[] openingT = openingtime.Split(':');
+            string[] closingT = openingtime.Split(':');
+
+            this.OpeningTime = new TimeSpan(int.Parse(openingT[0]), int.Parse(openingT[1]), 0);
             this.ClosingingTime = new TimeSpan(int.Parse(closingT[0]), int.Parse(closingT[1]), 0);
             this.Day = day;
         }
@@ -99,12 +93,12 @@ namespace CafeProject
 
     public abstract class Building
     {
-        
+
         //properties
         public virtual string Type { get; protected set; }
         public abstract Address BulidingAddress { get; protected set; }
         public abstract GeoCoordinate Coordinates { get; protected set; }
-        
+
 
         //constructor
         public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "")
@@ -113,14 +107,13 @@ namespace CafeProject
             this.BulidingAddress = buildingAddress;
             this.Coordinates = cordinates;
             this.Type = type;
-            AllBuildings.Add(this);
         }
 
         //Methods
-        public virtual List<Building> Nearby(List<Building> allBuldings)
+        public virtual List<Building> Nearby()
         {
             List<Building> nearbyBuildings = new List<Building>();
-            foreach (Building b in AllBuildings)
+            foreach (Building b in MyMap.AllBuildings)
             {
                 if (this.Coordinates.GetDistanceTo(b.Coordinates) <= 1000)
                     nearbyBuildings.Add(b);
@@ -128,27 +121,10 @@ namespace CafeProject
 
             return nearbyBuildings;
         }
-        //public static List<Building> Nearby(Building build, List<Building> building)
-        //{
-        //    List<Building> nearbyBuildings = new List<Building>();
-        //    foreach (Building b in building)
-        //    {
-        //        if (build.Coordinates.GetDistanceTo(b.Coordinates) <= 1000)
-        //        {
-        //            nearbyBuildings.Add(b);
-        //        }
-        //    }
-        //    return nearbyBuildings;
-        //}
 
         public virtual double Directions(Building building)
         {
             return this.Coordinates.GetDistanceTo(building.Coordinates);
-        }
-
-        public virtual double Directions(Building building1, Building building2)
-        {
-            return building1.Coordinates.GetDistanceTo(building2.Coordinates);
         }
 
     }
