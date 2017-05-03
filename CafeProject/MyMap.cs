@@ -35,16 +35,25 @@ namespace CafeProject
             {
                 String line = Console.ReadLine();
                 command = DetectCommand(line);
+                line = line.Replace(command.ToString(), "").Trim();
+                Building building;
                 if (command == Command.nothing)
                 {
                     Console.WriteLine("Error:  Write correct command");
                 }
                 else
                 {
-
+                    switch (command)
+                    {
+                        case Command.search:
+                            building = Search(line);
+                            Console.WriteLine(building.ToString());
+                            break;
+                    }
                 }
 
             }
+
             Console.WriteLine("=======================================================================================================");
         }
 
@@ -68,26 +77,23 @@ namespace CafeProject
             {
                 if (command.Equals(line))
                 {
-                    Command.Parse(typeof(Command),command);
-                    
+                    return (Command)Enum.Parse(typeof(Command), command);
                 }
             }
-            
             return Command.nothing;
         }
-        //public static Command DetectCommand(String line)
-        //{
-        //    Command c = CommandInLine(line);
-        //    if (c != Command.nothing)
-        //    {
-        //        if (MyMap.CommandInLine(line.Replace(c.ToString(), "")) == Command.nothing)
-        //        {
-        //            return c;
-        //        }
-        //    }
-        //    return Command.nothing;
-        //}
-        ////Prints
+        public static Building Search(String nameOfCafe)
+        {
+            foreach (Building b in allBuildings)
+            {
+                if (b.Name.Equals(nameOfCafe))
+                {
+                    return b;
+                }
+            }
+            return null;
+        }
+
         static public void PrintAllCommands()
         {
             Console.WriteLine("All commands: {0}, {1}, {2}, {3}", Command.search, Command.save, Command.allCommands, Command.exit);

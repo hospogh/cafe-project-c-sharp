@@ -98,12 +98,13 @@ namespace CafeProject
         public virtual string Type { get; protected set; }
         public abstract Address BulidingAddress { get; protected set; }
         public abstract GeoCoordinate Coordinates { get; protected set; }
+        public virtual string Name { get; set; }
 
 
         //constructor
-        public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "")
+        public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "", string name = "")
         {
-            //this.Name = name;
+            this.Name = name;
             this.BulidingAddress = buildingAddress;
             this.Coordinates = cordinates;
             this.Type = type;
