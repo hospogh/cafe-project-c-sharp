@@ -130,5 +130,6 @@ namespace CafeProject
 
         public abstract void AddRate(UserRating rate);
 
+
     }
 }
