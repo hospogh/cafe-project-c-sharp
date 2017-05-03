@@ -130,6 +130,12 @@ namespace CafeProject
 
         public abstract void AddRate(UserRating rate);
 
-
     }
 }
+/*
+ * user log in
+ * search simialr names
+ * geolocation
+ * rate, review
+ * nearby with given distance
+*/
