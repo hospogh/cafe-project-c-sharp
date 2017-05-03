@@ -194,7 +194,8 @@ namespace CafeProject
  * user sign up
  * user log in
  * search simialr names
- * geolocation
+ * user geolocation
  * rate, review
+ * 
  * nearby with given distance
 */
