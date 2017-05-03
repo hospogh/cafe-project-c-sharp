@@ -9,6 +9,8 @@ namespace CafeProject
 {
     sealed class Cafe : Building
     {
+        private static List<Building> allCafes = new List<Building>();
+
         //properties
         public int Popularity { get; private set; }
         public string Name { get; private set; }
@@ -19,8 +21,8 @@ namespace CafeProject
         public String OpeningStatus { get { return IsOpen() ? "Opened " : "Closed "; } }
         public override Address BulidingAddress { get; protected set; }
         public override GeoCoordinate Coordinates { get; protected set; }
-        public static List<Building> AllCafes { get; private set; }     
-        private static List<Building> allCafes = new List<Building>();
+        public static List<Building> AllCafes { get; private set; }    
+         
         //constructors
         public Cafe(string name, Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, string telephone = "", string link = "") : base(buildingAddress, cordinates, "Coffe")
         {
@@ -45,41 +47,6 @@ namespace CafeProject
         private Boolean IsOpen()
         {
                 DateTime now = DateTime.Now;
-
-                //Time nowTime = new Time(now.Hour, now.Minute);
-                //int day;
-                //switch (now.DayOfWeek)
-                //{
-                //    case DayOfWeek.Sunday:
-                //        day = (int)DayOfWeek.Sunday;
-                //        return OpenTimes[day].ClosingingTime > nowTime && nowTime >= OpenTimes[day].OpeningTime;
-                //        break;
-                //    case DayOfWeek.Monday:
-                //        day = (int)DayOfWeek.Monday;
-                //        return OpenTimes[day].ClosingingTime > nowTime && nowTime >= OpenTimes[day].OpeningTime;
-                //        break;
-                //    case DayOfWeek.Tuesday:
-                //        day = (int)DayOfWeek.Tuesday;
-                //        return OpenTimes[day].ClosingingTime > nowTime && nowTime >= OpenTimes[day].OpeningTime;
-                //        break;
-                //    case DayOfWeek.Wednesday:
-                //        day = (int)DayOfWeek.Wednesday;
-                //        return OpenTimes[day].ClosingingTime > nowTime && nowTime >= OpenTimes[day].OpeningTime;
-                //        break;
-                //    case DayOfWeek.Thursday:
-                //        day = (int)DayOfWeek.Thursday;
-                //        return OpenTimes[day].ClosingingTime > nowTime && nowTime >= OpenTimes[day].OpeningTime;
-                //        break;
-                //    case DayOfWeek.Friday:
-                //        day = (int)DayOfWeek.Friday;
-                //        return OpenTimes[day].ClosingingTime > nowTime && nowTime >= OpenTimes[day].OpeningTime;
-                //        break;
-                //    case DayOfWeek.Saturday:
-                //        day = (int)DayOfWeek.Saturday;
-                //        return OpenTimes[day].ClosingingTime > nowTime && nowTime >= OpenTimes[day].OpeningTime;
-                //        break;
-                //    default: return false;
-                //}
                 foreach (string dayOfWeek in Enum.GetNames(typeof(DayOfWeek)))
                 {
                     if (now.DayOfWeek.ToString() == dayOfWeek)
@@ -109,6 +76,21 @@ namespace CafeProject
         public override double Directions(Building building)
         {
             return base.Directions(building);
+        }
+
+        public override string ToString()
+        {
+            string res = "";
+            res += this.Name + "\n" + this.BulidingAddress + "\n" + this.Link  + "\n"+ this.Telephone + "\n" + this.OpeningStatus + "\n";
+            foreach (OpenTimes openT in OpenTimes)
+            {
+                res += openT + "\n";
+            }
+
+            res += this.CafeRates + "\n";
+
+            return res;
+
         }
     }
 }
