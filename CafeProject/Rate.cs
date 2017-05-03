@@ -57,10 +57,15 @@ namespace CafeProject
         {
             get
             {
+
                 int s = 0;
                 for (int i = 1; i < CountsOfRates.Length; i++)
                 {
                     s += CountsOfRates[i] * i;
+                }
+                if (CountOfRaters == 0)
+                {
+                    return 0;
                 }
                 return s / CountOfRaters;
             }
@@ -88,7 +93,7 @@ namespace CafeProject
         }
 
         //methods
-        
+
         public override string ToString()
         {
             return "Rating: " + RatingAverage + "\nCount Of 1: " + CountsOfRates[1] + "\nCount Of 2: " + CountsOfRates[2] + "\nCount Of 3: " + CountsOfRates[3] + "\nCount Of 4: " + CountsOfRates[4] + "\nCount Of 5: " + CountsOfRates[5];

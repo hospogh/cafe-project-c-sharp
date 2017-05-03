@@ -13,18 +13,18 @@ namespace CafeProject
 
         //properties
         public int Popularity { get; private set; }
-        public string Name { get; private set; }
+        public override string Name { get; set; }
         public string Telephone { get; set; }
         public string Link { get; set; }
-        public AllRates CafeRates { get; private set; }
-        public OpenTimes[] OpenTimes { get; private set; }
+        public AllRates CafeRates { get; set; }
+        public OpenTimes[] OpenTimes { get; set; }
         public String OpeningStatus { get { return IsOpen() ? "Opened " : "Closed "; } }
         public override Address BulidingAddress { get; protected set; }
         public override GeoCoordinate Coordinates { get; protected set; }
-        public static List<Building> AllCafes { get; private set; }    
-         
+        public static List<Building> AllCafes { get; private set; }
+
         //constructors
-        public Cafe(string name, Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, string telephone = "", string link = "") : base(buildingAddress, cordinates, "Coffe",name)
+        public Cafe(Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, string name, string telephone = "", string link = "") : base(buildingAddress, cordinates, "Coffe", name)
         {
             this.CafeRates = new AllRates();
             this.Name = name;
@@ -33,7 +33,7 @@ namespace CafeProject
             this.Link = link;
             allCafes.Add(this);
         }
-        public Cafe(string name, Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, AllRates coffeRates, string telephone = "", string link = "") : base(buildingAddress, cordinates, "Coffe",name)
+        public Cafe(string name, Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, AllRates coffeRates, string telephone = "", string link = "") : base(buildingAddress, cordinates, "Coffe", name)
         {
             this.CafeRates = coffeRates;
             this.Name = name;
@@ -46,19 +46,19 @@ namespace CafeProject
 
         private Boolean IsOpen()
         {
-                DateTime now = DateTime.Now;
-                foreach (string dayOfWeek in Enum.GetNames(typeof(DayOfWeek)))
+            DateTime now = DateTime.Now;
+            foreach (string dayOfWeek in Enum.GetNames(typeof(DayOfWeek)))
+            {
+                if (now.DayOfWeek.ToString().Equals(dayOfWeek))
                 {
-                    if (now.DayOfWeek.ToString() == dayOfWeek)
-                    {
-                        int day = int.Parse(dayOfWeek);
-                        if (now.TimeOfDay.CompareTo(OpenTimes[day].OpeningTime) == 1 && now.TimeOfDay.CompareTo(OpenTimes[day].ClosingingTime) == -1)
-                            return true;
-                        else
-                            return false;
-                    }
+                    int day = (int)(DayOfWeek)Enum.Parse(typeof(DayOfWeek), dayOfWeek);
+                    if (now.TimeOfDay.CompareTo(OpenTimes[day].OpeningTime) == 1 && now.TimeOfDay.CompareTo(OpenTimes[day].ClosingingTime) == -1)
+                        return true;
+                    else
+                        return false;
                 }
-                return false;
+            }
+            return false;
         }
 
         public override List<Building> Nearby(int distanceInMeters)
@@ -81,7 +81,7 @@ namespace CafeProject
         public override string ToString()
         {
             string res = "";
-            res += this.Name + "\n" + this.BulidingAddress + "\n" + this.Link  + "\n"+ this.Telephone + "\n" + this.OpeningStatus + "\n";
+            res += this.Name + "\n" + this.BulidingAddress + "\n" + this.Link + "\n" + this.Telephone + "\n" + this.OpeningStatus + "\n";
             foreach (OpenTimes openT in OpenTimes)
             {
                 res += openT + "\n";
@@ -95,7 +95,7 @@ namespace CafeProject
 
         public override void AddRate(UserRating rate)
         {
-           CafeRates.Ratings.Add(rate);
+            CafeRates.Ratings.Add(rate);
             switch (rate.UserRate)
             {
                 case Rate.one: CafeRates.CountsOfRates[1]++; break;

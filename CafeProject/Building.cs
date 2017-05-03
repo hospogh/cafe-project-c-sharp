@@ -7,67 +7,6 @@ using System.Device.Location;
 
 namespace CafeProject
 {
-    //class Time
-    //{
-    //    public int Hour { get; set; }
-    //    public int Minute { get; set; }
-    //    public Time(DateTime time)
-    //    {
-    //        this.Hour = time.Hour;
-    //        this.Minute = time.Minute;
-
-    //    }
-    //    public Time(String time)
-    //    {
-    //        // in HH:mm format
-    //        string[] t = time.Split(':');
-    //        this.Hour = int.Parse(t[0]);
-    //        this.Minute = int.Parse(t[1]);
-    //    }
-    //    public Time(int hour, int minute)
-    //    {
-    //        this.Hour = hour;
-    //        this.Minute = minute;
-    //    }
-
-    //    public static bool operator ==(Time left, Time right)
-    //    {
-    //        return left.Hour == right.Hour && left.Minute == right.Minute;
-    //    }
-    //    public static bool operator !=(Time left, Time right)
-    //    {
-    //        return !(left == right);
-    //    }
-    //    public static bool operator >(Time left, Time right)
-    //    {
-    //        if ((left.Hour > right.Hour) || (left.Hour == right.Hour && left.Minute > right.Minute))
-    //        {
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-    //    public static bool operator <(Time left, Time right)
-    //    {
-    //        if ((left.Hour < right.Hour) || (left.Hour == right.Hour && left.Minute < right.Minute))
-    //        {
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-    //    public static bool operator >=(Time left, Time right)
-    //    {
-    //        return left > right || left == right;
-    //    }
-    //    public static bool operator <=(Time left, Time right)
-    //    {
-    //        return left < right || left == right;
-    //    }
-    //    public override string ToString()
-    //    {
-    //        //in HH:mm format
-    //        return this.Hour + ":" + this.Minute;
-    //    }
-    //}
 
     struct OpenTimes
     {
@@ -102,7 +41,7 @@ namespace CafeProject
 
 
         //constructor
-        public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "", string name = "", )
+        public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "", string name = "")
         {
             this.Name = name;
             this.BulidingAddress = buildingAddress;
@@ -132,10 +71,3 @@ namespace CafeProject
 
     }
 }
-/*
- * user log in
- * search simialr names
- * geolocation
- * rate, review
- * nearby with given distance
-*/

@@ -19,31 +19,30 @@ namespace CafeProject
     }
     public static class MyMap
     {
-        static private Command[] commands = { Command.search, Command.save, Command.allCommands, Command.exit };
-
         private static List<Building> allBuildings = new List<Building>();
-        public static List<Building> AllBuildings { get { return allBuildings; } }
-
+        public static List<Building> AllBuildings
+        {
+            get { return allBuildings; }
+            set { allBuildings = value; }
+        }
         static public void MyConsole()
         {
-            Console.WriteLine("Enter Name: ");
-            string name = Console.ReadLine();
-            Console.WriteLine("Enter email: ");
-            string email = Console.ReadLine();
+            Console.Write("Enter Name: ");
+            string name = Console.ReadLine().Replace("Enter Name: ", "");
+            Console.Write("Enter email: ");
+            string email = Console.ReadLine().Replace("Enter email: ", "");
             User myUser = new User(name, email);
-            Console.WriteLine("=======================================================================================================");
-            Console.WriteLine("Console Name: AnnManЯ");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             Console.WriteLine("Every line can contain only one command");
-            PrintAllCommands();
             Console.WriteLine();
             Command command = Command.nothing;
-
+            Building selectedBuilding = null;
             while (command != Command.exit)
             {
-                String line = Console.ReadLine();
+                Console.Write(email + ":");
+                String line = Console.ReadLine().Replace(email + ":", "");
                 command = DetectCommand(line);
                 line = line.Replace(command.ToString(), "").Trim();
-                Building selectedBuilding = null;
                 if (command == Command.nothing)
                 {
                     Console.WriteLine("Error:  Write correct command");
@@ -54,30 +53,40 @@ namespace CafeProject
                     {
                         case Command.search:
                             List<Building> foundBuildings = Search(line);
-                            if (foundBuildings.Count == 1)
+                            if (foundBuildings != null)
                             {
-                                selectedBuilding = foundBuildings[0];
-                                Console.WriteLine(selectedBuilding);
-                            }
-                            else if (foundBuildings.Count > 1)
-                            {
-                                Console.WriteLine("There are several buildings with this name:");
-                                foreach (Building b in foundBuildings)
+                                if (foundBuildings.Count == 1)
                                 {
-                                    Console.WriteLine(b.Name + "\n" +"Address: " +  b.BulidingAddress);
-                                    Console.WriteLine();
+                                    selectedBuilding = foundBuildings[0];
+                                    Console.WriteLine(selectedBuilding);
                                 }
-                                Console.WriteLine("Which one did you mean ?");
-                            }
-                            else if(foundBuildings.Count == 0)
-                            {
-                                foundBuildings = SearchBuildingsWithSimilarName(line);
-                                Console.WriteLine("There are several buildings with similar name:");
-                                foreach (Building b in foundBuildings)
+                                else if (foundBuildings.Count > 1)
                                 {
-                                    Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
+                                    Console.WriteLine("There are several buildings with this name:\n");
+                                    foreach (Building b in foundBuildings)
+                                    {
+                                        Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress);
+                                        Console.WriteLine();
+                                    }
+                                    Console.WriteLine("Which one did you mean ?");
                                 }
-                                Console.WriteLine("Which one did you mean ?");
+                                else if (foundBuildings.Count == 0)
+                                {
+                                    foundBuildings = SearchBuildingsWithSimilarName(line);
+                                    if (foundBuildings != null)
+                                    {
+                                        Console.WriteLine("There are several buildings with similar name:\n");
+                                        foreach (Building b in foundBuildings)
+                                        {
+                                            Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
+                                        }
+                                        Console.WriteLine("Which one did you mean ?");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("There are no buildings with simular name.");
+                                    }
+                                }
                             }
                             break;
                         case Command.save:
@@ -89,7 +98,7 @@ namespace CafeProject
                         case Command.rate:
                             if (selectedBuilding != null)
                             {
-                                UserRating rate = new UserRating(myUser, (Rate)line[0], line.Remove(0).Trim());
+                                UserRating rate = new UserRating(myUser, (Rate)(line[0] - '0'), line.Remove(0).Trim());
                                 selectedBuilding.AddRate(rate);
                             }
                             else
@@ -107,24 +116,13 @@ namespace CafeProject
                                 }
                             }
                             break;
-                        case Command.save:
-                            if (building != null)
-                            {
-                                myUser.Save(building);
-                            }
-                            else Console.WriteLine("There is no building with such name");
+                        case Command.allCommands:
+                            PrintAllCommandes();
                             break;
-                        case Command.rate:
-                            if (building != null)
-                            {
-                                building.
-                            }
                     }
                 }
-
             }
-
-            Console.WriteLine("=======================================================================================================");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
 
         public static double Directions(Building building1, Building building2)
@@ -162,7 +160,7 @@ namespace CafeProject
                     searchedBuildings.Add(b);
                 }
             }
-            return null;
+            return searchedBuildings;
         }
 
         public static List<Building> SearchBuildingsWithSimilarName(String nameOfCafe)
@@ -175,12 +173,28 @@ namespace CafeProject
                     searchedBuildings.Add(b);
                 }
             }
-            return null;
+            return searchedBuildings;
         }
-
-        static public void PrintAllCommands()
+        public static void PrintAllCommandes()
         {
-            Console.WriteLine("All commands: {0}, {1}, {2}, {3}", Command.search, Command.save, Command.allCommands, Command.exit);
+            Console.WriteLine();
+            foreach (string c in Enum.GetNames(typeof(Command)))
+            {
+                if (!c.Equals(Command.nothing.ToString()))
+                {
+                    Console.WriteLine(c);
+                }
+            }
+            Console.WriteLine();
         }
     }
 }
+
+/*
+ * user sign up
+ * user log in
+ * search simialr names
+ * geolocation
+ * rate, review
+ * nearby with given distance
+*/
