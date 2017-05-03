@@ -52,7 +52,7 @@ namespace CafeProject
                     }
                 }
 
-            }
+                }
 
             Console.WriteLine("=======================================================================================================");
         }
@@ -70,7 +70,7 @@ namespace CafeProject
 
 
         //Detecting Command in line
-        private static Command DetectCommand(String line)
+        private static string DetectCommand(String line)
         {
             line = line.Trim().Split()[0];
             foreach (string command in Enum.GetNames(typeof(Command)))
