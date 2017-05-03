@@ -107,10 +107,22 @@ namespace CafeProject
                                 }
                             }
                             break;
+                        case Command.save:
+                            if (building != null)
+                            {
+                                myUser.Save(building);
+                            }
+                            else Console.WriteLine("There is no building with such name");
+                            break;
+                        case Command.rate:
+                            if (building != null)
+                            {
+                                building.
+                            }
                     }
                 }
 
-                }
+            }
 
             Console.WriteLine("=======================================================================================================");
         }
@@ -165,7 +177,6 @@ namespace CafeProject
             }
             return null;
         }
-
 
         static public void PrintAllCommands()
         {
