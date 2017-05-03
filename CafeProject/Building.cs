@@ -111,12 +111,12 @@ namespace CafeProject
         }
 
         //Methods
-        public virtual List<Building> Nearby()
+        public virtual List<Building> Nearby(int distanceInMeters)
         {
             List<Building> nearbyBuildings = new List<Building>();
             foreach (Building b in MyMap.AllBuildings)
             {
-                if (this.Coordinates.GetDistanceTo(b.Coordinates) <= 1000)
+                if (this.Coordinates.GetDistanceTo(b.Coordinates) <= distanceInMeters)
                     nearbyBuildings.Add(b);
             }
 
@@ -127,6 +127,8 @@ namespace CafeProject
         {
             return this.Coordinates.GetDistanceTo(building.Coordinates);
         }
+
+        public abstract void AddRate(UserRating rate);
 
     }
 }

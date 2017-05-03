@@ -6,18 +6,6 @@ using System.Threading.Tasks;
 
 namespace CafeProject
 {
-    //public class Review
-    //{
-    //    public User UserName { get; private set; }
-    //    public string UsersReview { get; set; }
-
-    //    public Review(User user, string review)
-    //    {
-    //        this.UserName = user;
-    //        this.UsersReview = review;
-    //    }
-    //}
-
     public enum Rate
     {
         one = 1,
@@ -100,22 +88,7 @@ namespace CafeProject
         }
 
         //methods
-        public void AddRate(UserRating rate)
-        {
-            //if (Ratings == null)
-            //{
-            //    this.Ratings = new List<UserRating>();
-            //}
-            Ratings.Add(rate);
-            switch (rate.UserRate)
-            {
-                 case Rate.one: CountsOfRates[1]++; break;
-                 case Rate.two: CountsOfRates[2]++; break;
-                 case Rate.three: CountsOfRates[3]++; break;
-                 case Rate.four: CountsOfRates[4]++; break;
-                 case Rate.five: CountsOfRates[5]++; break;
-            }
-        }
+        
         public override string ToString()
         {
             return "Rating: " + RatingAverage + "\nCount Of 1: " + CountsOfRates[1] + "\nCount Of 2: " + CountsOfRates[2] + "\nCount Of 3: " + CountsOfRates[3] + "\nCount Of 4: " + CountsOfRates[4] + "\nCount Of 5: " + CountsOfRates[5];
