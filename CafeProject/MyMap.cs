@@ -11,6 +11,7 @@ namespace CafeProject
         nothing,
         search,
         save,
+        rate
         allCommands,
         exit
     }
@@ -24,7 +25,8 @@ namespace CafeProject
         static public void MyConsole()
         {
             Console.WriteLine("User Name: ");
-            //User myUser = new User(Console.ReadLine());
+            string[] u = Console.ReadLine().Split();
+            User myUser = new User(u[0], u[1]);
             Console.WriteLine("=======================================================================================================");
             Console.WriteLine("Console Name: AnnManЯ");
             Console.WriteLine("Every line can contain only one command");
@@ -36,7 +38,7 @@ namespace CafeProject
                 String line = Console.ReadLine();
                 command = DetectCommand(line);
                 line = line.Replace(command.ToString(), "").Trim();
-                Building building;
+                Building building = null;
                 if (command == Command.nothing)
                 {
                     Console.WriteLine("Error:  Write correct command");
@@ -49,10 +51,22 @@ namespace CafeProject
                             building = Search(line);
                             Console.WriteLine(building.ToString());
                             break;
+                        case Command.save:
+                            if (building != null)
+                            {
+                                myUser.Save(building);
+                            }
+                            else Console.WriteLine("There is no building with such name");
+                            break;
+                        case Command.rate:
+                            if (building != null)
+                            {
+                                building.
+                            }
                     }
                 }
 
-                }
+            }
 
             Console.WriteLine("=======================================================================================================");
         }
@@ -70,7 +84,7 @@ namespace CafeProject
 
 
         //Detecting Command in line
-        private static string DetectCommand(String line)
+        private static Command DetectCommand(String line)
         {
             line = line.Trim().Split()[0];
             foreach (string command in Enum.GetNames(typeof(Command)))

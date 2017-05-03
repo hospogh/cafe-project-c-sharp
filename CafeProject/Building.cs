@@ -102,7 +102,7 @@ namespace CafeProject
 
 
         //constructor
-        public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "", string name = "")
+        public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "", string name = "", )
         {
             this.Name = name;
             this.BulidingAddress = buildingAddress;
