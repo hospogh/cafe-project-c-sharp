@@ -30,17 +30,18 @@ namespace CafeProject
         }
     }
 
-    public abstract class Building
+    public class Building
     {
 
         //properties
         public virtual string Type { get; protected set; }
-        public abstract Address BulidingAddress { get; protected set; }
-        public abstract GeoCoordinate Coordinates { get; protected set; }
+        public virtual Address BulidingAddress { get; protected set; }
+        public virtual GeoCoordinate Coordinates { get; protected set; }
         public virtual string Name { get; set; }
 
 
         //constructor
+        public Building() { }
         public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "", string name = "")
         {
             this.Name = name;
@@ -67,7 +68,9 @@ namespace CafeProject
             return this.Coordinates.GetDistanceTo(building.Coordinates);
         }
 
-        public abstract void AddRate(UserRating rate);
+        public virtual void AddRate(UserRating rate)
+        {
+        }
 
     }
 }

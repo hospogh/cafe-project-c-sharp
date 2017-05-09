@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Xml.Serialization;
 using System.Device.Location;
+using Newtonsoft.Json;
 
 namespace CafeProject
 {
@@ -26,6 +27,8 @@ namespace CafeProject
     }
     public static class MyMap
     {
+        private const string userPath = @"../../users.json";
+        private const string buildingPath = @"../../buildings.json";
         private static List<Building> allBuildings = new List<Building>();
         public static List<Building> AllBuildings
         {
@@ -40,6 +43,8 @@ namespace CafeProject
         }
         static public void MyConsole()
         {
+            allUsers = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(userPath));
+            allBuildings = JsonConvert.DeserializeObject<List<Building>>(File.ReadAllText(buildingPath));
             int i;
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             Console.WriteLine("Every line can contain only one command");
@@ -86,7 +91,7 @@ namespace CafeProject
                             else if (foundBuildings.Count > 1)
                             {
                                 Console.WriteLine("\nThere are several buildings with this name:\n");
-                                for ( i = 0; i < foundBuildings.Count; i++)
+                                for (i = 0; i < foundBuildings.Count; i++)
                                 {
                                     Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
                                 }
@@ -109,7 +114,7 @@ namespace CafeProject
                                 if (foundBuildings.Count != 0)
                                 {
                                     Console.WriteLine("\nThere are several buildings with similar name:\n");
-                                    for ( i = 0; i < foundBuildings.Count; i++)
+                                    for (i = 0; i < foundBuildings.Count; i++)
                                     {
                                         Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
                                     }
@@ -151,7 +156,7 @@ namespace CafeProject
                                     break;
                                 }
                             }
-                            if(i==allUsers.Count)
+                            if (i == allUsers.Count)
                             {
                                 myUser = new User(name, email, password);
                                 AllUsers.Add(myUser);
@@ -264,6 +269,8 @@ namespace CafeProject
                 }
             }
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            File.WriteAllText(buildingPath, JsonConvert.SerializeObject(allBuildings));
+            File.WriteAllText(userPath, JsonConvert.SerializeObject(allUsers));
         }
 
         public static double Directions(Building building1, Building building2)
