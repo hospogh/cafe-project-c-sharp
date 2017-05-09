@@ -36,7 +36,7 @@ namespace CafeProject
             op[4] = new OpenTimes(DayOfWeek.Tuesday, "12:12", "23:12");
             op[5] = new OpenTimes(DayOfWeek.Sunday, "12:12", "23:12");
             op[6] = new OpenTimes(DayOfWeek.Wednesday, "12:12", "23:12");
-            Building building1 = new Cafe(new Address("2/9", "Northen Aveneue", "Yerevan", "Armenia"), new GeoCoordinate(43.047550, -84.698465), op, "AnnMan", "+37477553364", "annmanya.com");
+            Building building1 = new Cafe(new Address("2/9", "Northen Aveneue", "Yerevan", "Armenia"), new GeoCoordinate(43.047550, -84.698465), op, "Jazzve", "+37477553364", "annmanya.com");
             Building building2 = new Cafe(new Address("2/9", "Komitas", "Yerevan", "Armenia"), new GeoCoordinate(43.049300, -84.699813), op, "Jose", "+122121321", "annmanya.com");
             Building building3 = new Cafe(new Address("2/9", "Pushkin", "Yerevan", "Armenia"), new GeoCoordinate(43.050970, -84.694992), op, "Jazzve", "+37477553364", "annmanya.com");
             Building building4 = new Cafe(new Address("2/9", "Ani", "Musaler", "Armenia"), new GeoCoordinate(43.059503, -84.698707), op, "Tashir Cafe", "+37477553364", "annmanya.com");

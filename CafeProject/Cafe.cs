@@ -18,7 +18,7 @@ namespace CafeProject
         public string Link { get; set; }
         public AllRates CafeRates { get; set; }
         public OpenTimes[] OpenTimes { get; set; }
-        public String OpeningStatus { get { return IsOpen() ? "Opened " : "Closed "; } }
+        public String OpeningStatus { get { return IsOpen() ? "Open now " : "Close now"; } }
         public override Address BulidingAddress { get; protected set; }
         public override GeoCoordinate Coordinates { get; protected set; }
         public static List<Building> AllCafes { get; private set; }
@@ -81,7 +81,7 @@ namespace CafeProject
         public override string ToString()
         {
             string res = "";
-            res += this.Name + "\n" + this.BulidingAddress + "\n" + this.Link + "\n" + this.Telephone + "\n" + this.OpeningStatus + "\n";
+            res += this.Name + "\nAddress: " + this.BulidingAddress + "\nWebsite:" + this.Link + "\nTelephone: " + this.Telephone + "\n" + this.OpeningStatus + "\n";
             foreach (OpenTimes openT in OpenTimes)
             {
                 res += openT + "\n";
