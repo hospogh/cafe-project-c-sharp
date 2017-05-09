@@ -17,18 +17,13 @@ namespace CafeProject
         save,
         rate,
         nearby,
-        directions,
-        select,
         signUp,
         logIn,
         logOut,
         changeMyCoordinates,
-        allCommands,
-        exit
+        exit,
+        allCommands
     }
-    /****/
-    /****/
-    /****/
     public static class MyMap
     {
         private static List<Building> allBuildings = new List<Building>();
@@ -45,9 +40,14 @@ namespace CafeProject
         }
         static public void MyConsole()
         {
+            int i;
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             Console.WriteLine("Every line can contain only one command");
-            Console.WriteLine();
+            Console.WriteLine("All commands:");
+            for (i = 1; i < Enum.GetNames(typeof(Command)).Length - 1; i++)
+            {
+                Console.WriteLine((Command)i);
+            }
             Command command = Command.nothing;
             Command previousCommand = Command.nothing;
             Building selectedBuilding = null;
@@ -57,7 +57,7 @@ namespace CafeProject
             {
                 if (selectedBuilding != null)
                 {
-                    Console.WriteLine( "Cafe: " + selectedBuilding.Name + "\n");
+                    Console.WriteLine("Cafe: " + selectedBuilding.Name + "\n");
                 }
                 if (myUser != null)
                 {
@@ -86,11 +86,21 @@ namespace CafeProject
                             else if (foundBuildings.Count > 1)
                             {
                                 Console.WriteLine("\nThere are several buildings with this name:\n");
-                                for (int i = 0; i < foundBuildings.Count; i++)
+                                for ( i = 0; i < foundBuildings.Count; i++)
                                 {
                                     Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
                                 }
                                 Console.WriteLine("Which one did you mean ? \n");
+                                string choose = Console.ReadLine();
+                                if (int.Parse(choose) > foundBuildings.Count || int.Parse(choose) < 1)
+                                {
+                                    Console.WriteLine("There is incorrect number. \n");
+                                }
+                                else
+                                {
+                                    selectedBuilding = foundBuildings[int.Parse(choose) - 1];
+                                    Console.WriteLine(selectedBuilding + "\n");
+                                }
                             }
                             else if (foundBuildings.Count == 0)
                             {
@@ -99,11 +109,21 @@ namespace CafeProject
                                 if (foundBuildings.Count != 0)
                                 {
                                     Console.WriteLine("\nThere are several buildings with similar name:\n");
-                                    for (int i = 0; i < foundBuildings.Count; i++)
+                                    for ( i = 0; i < foundBuildings.Count; i++)
                                     {
                                         Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
                                     }
                                     Console.WriteLine("Which one did you mean ? \n");
+                                    string choose = Console.ReadLine();
+                                    if (int.Parse(choose) > foundBuildings.Count || int.Parse(choose) < 1)
+                                    {
+                                        Console.WriteLine("There is incorrect number. \n");
+                                    }
+                                    else
+                                    {
+                                        selectedBuilding = foundBuildings[int.Parse(choose) - 1];
+                                        Console.WriteLine(selectedBuilding + "\n");
+                                    }
                                 }
                                 else
                                 {
@@ -111,77 +131,65 @@ namespace CafeProject
                                 }
                             }
                             break;
-                        case Command.select:
-                            if (!(previousCommand == Command.search || previousCommand == Command.select))
-                            {
-                                Console.WriteLine("There is nothing to choose. \n");
-                            }
-                            else
-                            {
-                                if (int.Parse(line) > foundBuildings.Count || int.Parse(line) < 1)
-                                {
-                                    Console.WriteLine("There is incorrect number. \n");
-                                }
-                                else
-                                {
-                                    selectedBuilding = foundBuildings[int.Parse(line) - 1];
-                                    Console.WriteLine(selectedBuilding + "\n");
-                                }
-                            }
-                            break;
                         case Command.signUp:
                             Console.Write("Name: ");
-                            string name = Console.ReadLine().Replace("Name: ","");
+                            string name = Console.ReadLine().Replace("Name: ", "");
                             Console.Write("Email: ");
                             string email = Console.ReadLine().Replace("Email: ", "");
                             if (!Regex.Replace(email, @"^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$", "").Equals(""))
                             {
-                                Console.WriteLine("Your account must be gmail.");
+                                Console.WriteLine("Write right gmail account.");
                                 break;
                             }
                             Console.Write("Password: ");
-                            string password = Console.ReadLine().Replace("Password: ","");
-                            foreach (User user in AllUsers)
+                            string password = Console.ReadLine().Replace("Password: ", "");
+                            for (i = 0; i < allUsers.Count; i++)
                             {
-                                if (user.Email == email)
+                                if (allUsers[i].Email == email)
                                 {
                                     Console.WriteLine("This mail already exist.");
-                                }
-                                else
-                                {
-                                    myUser = new User(name, email, password);
+                                    break;
                                 }
                             }
-                            Console.WriteLine("You've successfully singed up.");
+                            if(i==allUsers.Count)
+                            {
+                                myUser = new User(name, email, password);
+                                AllUsers.Add(myUser);
+                                Console.WriteLine("You've successfully singed up.");
+                            }
                             break;
                         case Command.logIn:
                             if (myUser == null)
                             {
                                 Console.Write("Email: ");
-                                email = Console.ReadLine().Replace("Email: ","");
-                                Console.Write("Password: ");
-                                password = Console.ReadLine().Replace("Password: ","");
-                                foreach (User user in AllUsers)
+                                email = Console.ReadLine().Replace("Email: ", "");
+                                for (i = 0; i < allUsers.Count; i++)
                                 {
-                                    if (user.Email == email)
+                                    if (allUsers[i].Email == email)
                                     {
-                                        if (user.Password == password)
-                                        {
-                                            myUser = new User(user.Name, email, password);
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Incorrect password.");
-                                            break;
-                                        }
+                                        myUser = allUsers[i];
+                                        break;
                                     }
+                                }
+                                if (i == allUsers.Count)
+                                {
                                     Console.WriteLine("There is no user with this email. You must sign up at first.");
+                                }
+                                else
+                                {
+                                    Console.Write("Password: ");
+                                    password = Console.ReadLine().Replace("Password: ", "");
+                                    if (allUsers[i].Password != password)
+                                    {
+                                        Console.WriteLine("Incorrect password.");
+                                        myUser = null;
+                                        break;
+                                    }
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("You're already loged in.");
+                                Console.WriteLine("You are already logged in");
                             }
                             break;
                         case Command.logOut:
@@ -190,7 +198,7 @@ namespace CafeProject
                         case Command.save:
                             if (selectedBuilding != null)
                             {
-                                if(myUser == null)
+                                if (myUser == null)
                                 {
                                     Console.WriteLine("\n Please log in. \n");
                                 }
