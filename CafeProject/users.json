@@ -1,1 +1,32 @@
-[{"UserSearches":[],"Name":"hospogh","Email":"hospogh@gmail.com","Password":"alahakbar","Coordinates":null,"Saved":[{"Type":null,"BulidingAddress":null,"Coordinates":null,"Name":"Jazzve"}]}]
+[
+  {
+    "UserSearches": [ ],
+    "Name": "hospogh",
+    "Email": "hospogh@gmail.com",
+    "Password": "alahakbar",
+    "Coordinates": null,
+    "Saved": [
+      {
+        "Type": null,
+        "BulidingAddress": null,
+        "Coordinates": null,
+        "Name": "Jazzve"
+      }
+    ]
+  },
+  {
+    "Coordinates": null,
+    "Email": "anahit@gmail.com",
+    "Name": "AN",
+    "Password": "asdf",
+    "Saved": [
+      {
+        "Type": null,
+        "BulidingAddress": null,
+        "Coordinates": null,
+        "Name": "Jose"
+      }
+    ],
+    "UserSearches": [ ]
+  }
+]

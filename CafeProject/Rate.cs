@@ -19,12 +19,14 @@ namespace CafeProject
         public String Name { get; private set; }
         public Rate UserRate { get; private set; }
         public String UserReview { get; private set; }
+        public User User { get; set; }
 
-        public UserRating(User user, Rate rate, String review = "")       /**/
+        public UserRating(User user, Rate rate, String review = "")  
         {
             this.Name = user.Name;
             this.UserRate = rate;
             this.UserReview = review;
+            this.User = user;
         }
 
         public void Print()

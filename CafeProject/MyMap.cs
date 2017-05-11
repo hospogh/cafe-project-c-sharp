@@ -21,9 +21,10 @@ namespace CafeProject
         signUp,
         logIn,
         logOut,
+        removeAccount,
         changeMyCoordinates,
-        exit,
-        allCommands
+        mySavedCafes,
+        exit
     }
     public static class MyMap
     {
@@ -49,10 +50,11 @@ namespace CafeProject
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             Console.WriteLine("Every line can contain only one command");
             Console.WriteLine("All commands:");
-            for (i = 1; i < Enum.GetNames(typeof(Command)).Length - 1; i++)
+            for (i = 1; i < Enum.GetNames(typeof(Command)).Length; i++)
             {
                 Console.WriteLine((Command)i);
             }
+            Console.WriteLine();
             Command command = Command.nothing;
             Command previousCommand = Command.nothing;
             Building selectedBuilding = null;
@@ -62,11 +64,11 @@ namespace CafeProject
             {
                 if (selectedBuilding != null)
                 {
-                    Console.WriteLine("Cafe: " + selectedBuilding.Name + "\n");
+                    Console.WriteLine(">>Cafe: " + selectedBuilding.Name);
                 }
                 if (myUser != null)
                 {
-                    Console.WriteLine("User: " + myUser.Email + "\n");
+                    Console.WriteLine(">>User: " + myUser.Email + "\n");
                 }
                 previousCommand = command;
                 String line = Console.ReadLine();
@@ -146,8 +148,31 @@ namespace CafeProject
                                 Console.WriteLine("Write right gmail account.");
                                 break;
                             }
+
+                            string password = "";
                             Console.Write("Password: ");
-                            string password = Console.ReadLine().Replace("Password: ", "");
+                            ConsoleKeyInfo key;
+
+                            do
+                            {
+                                key = Console.ReadKey(true);
+                                if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                                {
+                                    password += key.KeyChar;
+                                    Console.Write("*");
+                                }
+                                else
+                                {
+                                    if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                                    {
+                                        password = password.Substring(0, (password.Length - 1));
+                                        Console.Write("\b \b");
+                                    }
+                                }
+                            }
+                            while (key.Key != ConsoleKey.Enter);
+
+
                             for (i = 0; i < allUsers.Count; i++)
                             {
                                 if (allUsers[i].Email == email)
@@ -160,7 +185,7 @@ namespace CafeProject
                             {
                                 myUser = new User(name, email, password);
                                 AllUsers.Add(myUser);
-                                Console.WriteLine("You've successfully singed up.");
+                                Console.WriteLine("\nYou've successfully singed up.");
                             }
                             break;
                         case Command.logIn:
@@ -182,14 +207,28 @@ namespace CafeProject
                                 }
                                 else
                                 {
+                                    password = "";
                                     Console.Write("Password: ");
-                                    password = Console.ReadLine().Replace("Password: ", "");
-                                    if (allUsers[i].Password != password)
+
+                                    do
                                     {
-                                        Console.WriteLine("Incorrect password.");
-                                        myUser = null;
-                                        break;
+                                        key = Console.ReadKey(true);
+                                        if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                                        {
+                                            password += key.KeyChar;
+                                            Console.Write("*");
+                                        }
+                                        else
+                                        {
+                                            if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                                            {
+                                                password = password.Substring(0, (password.Length - 1));
+                                                Console.Write("\b \b");
+                                            }
+                                        }
                                     }
+                                    while (key.Key != ConsoleKey.Enter);
+                                    Console.WriteLine();
                                 }
                             }
                             else
@@ -205,9 +244,12 @@ namespace CafeProject
                             {
                                 if (myUser == null)
                                 {
-                                    Console.WriteLine("\n Please log in. \n");
+                                    Console.WriteLine("\nPlease log in. \n");
                                 }
-                                myUser.Save(selectedBuilding);
+                                else
+                                {
+                                    myUser.Save(selectedBuilding);
+                                }
                             }
                             else
                                 Console.WriteLine("There is no selected building \n");
@@ -221,8 +263,15 @@ namespace CafeProject
                                 }
                                 else
                                 {
-                                    UserRating rate = new UserRating(myUser, (Rate)(line[0] - '0'), line.Remove(0).Trim());
-                                    selectedBuilding.AddRate(rate);
+                                    if (line[0] - '0' > 5 || line[0] - '0' < 1)
+                                    {
+                                        Console.WriteLine("Your rate must be from 1 to 5.");
+                                    }
+                                    else
+                                    {
+                                        UserRating rate = new UserRating(myUser, (Rate)(line[0] - '0'), line.Remove(0).Trim());
+                                        selectedBuilding.AddRate(rate);
+                                    }
                                 }
                             }
                             else
@@ -233,18 +282,32 @@ namespace CafeProject
                         case Command.nearby:
                             if (line.Split()[0].ToLower() == "me")
                             {
-                                List<Building> nearbyBuildings = myUser.Nearby(int.Parse(line.Split()[1]));
-                                foreach (Building b in nearbyBuildings)
+                                try
                                 {
-                                    Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
+                                    List<Building> nearbyBuildings = myUser.Nearby(int.Parse(line.Split()[1]));
+                                    foreach (Building b in nearbyBuildings)
+                                    {
+                                        Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
+                                    }
+                                }
+                                catch (FormatException)
+                                {
+                                    throw new Exception("Write correct distance.");
                                 }
                             }
                             else if (selectedBuilding != null)
                             {
-                                List<Building> nearbyBuildings = selectedBuilding.Nearby(int.Parse(line));
-                                foreach (Building b in nearbyBuildings)
+                                try
                                 {
-                                    Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
+                                    List<Building> nearbyBuildings = selectedBuilding.Nearby(int.Parse(line));
+                                    foreach (Building b in nearbyBuildings)
+                                    {
+                                        Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
+                                    }
+                                }
+                                catch (FormatException)
+                                {
+                                    Console.WriteLine("Write correct distance.");
                                 }
                             }
                             else
@@ -262,8 +325,11 @@ namespace CafeProject
                                 Console.WriteLine("You must log in at first.");
                             }
                             break;
-                        case Command.allCommands:
-                            PrintAllCommandes();
+                        case Command.mySavedCafes:
+                            foreach (Building b in myUser.Saved)
+                            {
+                                Console.WriteLine(b);
+                            }
                             break;
                     }
                 }
@@ -327,6 +393,7 @@ namespace CafeProject
             }
             return searchedBuildings;
         }
+
         public static void PrintAllCommandes()
         {
             Console.WriteLine();

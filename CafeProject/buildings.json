@@ -1,1 +1,26 @@
-[{"Type":null,"BulidingAddress":null,"Coordinates":null,"Name":"Jazzve"},{"Type":null,"BulidingAddress":null,"Coordinates":null,"Name":"Jose"},{"Type":null,"BulidingAddress":null,"Coordinates":null,"Name":"Jazzve"},{"Type":null,"BulidingAddress":null,"Coordinates":null,"Name":"Tashir Cafe"}]
+[
+  {
+    "Type": null,
+    "BulidingAddress": null,
+    "Coordinates": null,
+    "Name": "Jazzve"
+  },
+  {
+    "Type": null,
+    "BulidingAddress": null,
+    "Coordinates": null,
+    "Name": "Jose"
+  },
+  {
+    "BulidingAddress": null,
+    "Coordinates": null,
+    "Name": "Jazzve",
+    "Type": null
+  },
+  {
+    "Type": null,
+    "BulidingAddress": null,
+    "Coordinates": null,
+    "Name": "Tashir Cafe"
+  }
+]

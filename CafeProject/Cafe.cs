@@ -12,7 +12,6 @@ namespace CafeProject
         private static List<Building> allCafes = new List<Building>();
 
         //properties
-        public int Popularity { get; private set; }
         public override string Name { get; set; }
         public string Telephone { get; set; }
         public string Link { get; set; }
@@ -67,9 +66,8 @@ namespace CafeProject
         }
         public void Print()
         {
-            Popularity++;
-            Console.WriteLine("Caffe Name: {0}\nPopularity: {5}\nCaffe Address: {1}\nRating: {4}\nCaffe Link: {2}\nCaffe Telephone: {3}",
-                 Name, BulidingAddress, Link, Telephone, CafeRates.RatingAverage, Popularity);
+            Console.WriteLine("Caffe Name: {0}\nCaffe Address: {1}\nRating: {4}\nCaffe Link: {2}\nCaffe Telephone: {3}",
+                 Name, BulidingAddress, Link, Telephone, CafeRates.RatingAverage);
         }
         //public void AddPopularity(){Popularity++;}
 
