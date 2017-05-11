@@ -1,26 +1,26 @@
 [
   {
     "Type": null,
-    "BulidingAddress": null,
-    "Coordinates": null,
+    "BulidingAddress": { "City": "New York", "Street": "Bagramyan 40" },
+    "Coordinates": { "Longitude": 9.43004861, "Latitude": 54.79541778 },
     "Name": "Jazzve"
   },
   {
     "Type": null,
-    "BulidingAddress": null,
-    "Coordinates": null,
+    "BulidingAddress": { "City": "New York", "Street": "NY" },
+    "Coordinates": { "Longitude": 9.43004861, "Latitude": 54.79541778 },
     "Name": "Jose"
   },
   {
-    "BulidingAddress": null,
-    "Coordinates": null,
+    "BulidingAddress": { "City": "New York", "Street": "NY" },
+    "Coordinates": { "Longitude": 9.43004861, "Latitude": 54.79541778 },
     "Name": "Jazzve",
     "Type": null
   },
   {
-    "Type": null,
-    "BulidingAddress": null,
-    "Coordinates": null,
-    "Name": "Tashir Cafe"
+    "Type": "string",
+    "BulidingAddress": { "City": "New York", "Street": "NY" },
+    "Coordinates": { "Longitude": 9.43004861, "Latitude": 54.79541778 },
+    "Name": "Tashir Cafeooo"
   }
 ]
