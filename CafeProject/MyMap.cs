@@ -65,6 +65,8 @@ namespace CafeProject
                 if (selectedBuilding != null)
                 {
                     Console.WriteLine(">>Cafe: " + selectedBuilding.Name);
+                    Console.WriteLine("Address: " + selectedBuilding.BulidingAddress.City + ", " + selectedBuilding.BulidingAddress.Street);
+                    Console.WriteLine("Location: " + selectedBuilding.Coordinates.Latitude + ", " + selectedBuilding.Coordinates.Longitude);
                 }
                 if (myUser != null)
                 {
@@ -95,7 +97,7 @@ namespace CafeProject
                                 Console.WriteLine("\nThere are several buildings with this name:\n");
                                 for (i = 0; i < foundBuildings.Count; i++)
                                 {
-                                    Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
+                                    Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Type: " + foundBuildings[i].Type + "\n");
                                 }
                                 Console.WriteLine("Which one did you mean ? \n");
                                 string choose = Console.ReadLine();
@@ -118,7 +120,7 @@ namespace CafeProject
                                     Console.WriteLine("\nThere are several buildings with similar name:\n");
                                     for (i = 0; i < foundBuildings.Count; i++)
                                     {
-                                        Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
+                                        Console.WriteLine(i + 1 + " " + foundBuildings[i].Name);
                                     }
                                     Console.WriteLine("Which one did you mean ? \n");
                                     string choose = Console.ReadLine();
@@ -129,7 +131,7 @@ namespace CafeProject
                                     else
                                     {
                                         selectedBuilding = foundBuildings[int.Parse(choose) - 1];
-                                        Console.WriteLine(selectedBuilding + "\n");
+                                        //Console.WriteLine(selectedBuilding + "\n");
                                     }
                                 }
                                 else

@@ -38,11 +38,10 @@ namespace CafeProject
         public virtual Address BulidingAddress { get;  set; }
         public virtual GeoCoordinate Coordinates { get;  set; }
         public virtual string Name { get; set; }
-
-
+ 
         //constructor
         public Building() { }
-        public Building(Address buildingAddress, GeoCoordinate cordinates, String type = "", string name = "")
+        public Building(Address buildingAddress, GeoCoordinate cordinates, string type = "", string name = "")
         {
             this.Name = name;
             this.BulidingAddress = buildingAddress;
