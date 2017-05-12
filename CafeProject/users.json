@@ -1,10 +1,18 @@
 [
   {
     "Coordinates": null,
-    "Email": "hospogh@gmail.com",
-    "Name": "hospogh",
-    "Password": "alahakbar",
+    "Email": "maneh.harutyunyan@gmail.com",
+    "Name": "Maneh",
+    "Password": "1111",
     "Saved": [ ],
     "UserSearches": [ ]
+  },
+  {
+    "UserSearches": [ ],
+    "Name": "hosp",
+    "Email": "hovseppog@gmail.com",
+    "Password": "alah",
+    "Coordinates": null,
+    "Saved": [ ]
   }
 ]

@@ -97,7 +97,7 @@ namespace CafeProject
                                 Console.WriteLine("\nThere are several buildings with this name:\n");
                                 for (i = 0; i < foundBuildings.Count; i++)
                                 {
-                                    Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Type: " + foundBuildings[i].Type + "\n");
+                                    Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
                                 }
                                 Console.WriteLine("Which one did you mean ? \n");
                                 string choose = Console.ReadLine();
@@ -120,7 +120,7 @@ namespace CafeProject
                                     Console.WriteLine("\nThere are several buildings with similar name:\n");
                                     for (i = 0; i < foundBuildings.Count; i++)
                                     {
-                                        Console.WriteLine(i + 1 + " " + foundBuildings[i].Name);
+                                        Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "Address: " + foundBuildings[i].BulidingAddress + "\n");
                                     }
                                     Console.WriteLine("Which one did you mean ? \n");
                                     string choose = Console.ReadLine();
@@ -189,6 +189,7 @@ namespace CafeProject
                                 AllUsers.Add(myUser);
                                 Console.WriteLine("\nYou've successfully singed up.");
                             }
+                            password = Encode.Encrypt(password);
                             break;
                         case Command.logIn:
                             if (myUser == null)
@@ -230,6 +231,11 @@ namespace CafeProject
                                         }
                                     }
                                     while (key.Key != ConsoleKey.Enter);
+                                    if (myUser.Password != Encode.Encrypt(password))
+                                    {
+                                        Console.WriteLine("incorrect password");
+                                        myUser = null;
+                                    }
                                     Console.WriteLine();
                                 }
                             }

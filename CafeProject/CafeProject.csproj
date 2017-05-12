@@ -57,6 +57,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="Building.cs" />
     <Compile Include="Cafe.cs" />
+    <Compile Include="Encoding.cs" />
     <Compile Include="MyMap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

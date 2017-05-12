@@ -26,6 +26,7 @@ namespace CafeProject
         public Cafe() { }
         public Cafe(Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, string name, string telephone = "", string link = "")
         {
+            this.BulidingAddress = buildingAddress;
             this.CafeRates = new AllRates();
             this.Name = name;
             this.OpenTimes = openTimes;
