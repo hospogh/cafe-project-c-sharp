@@ -7,23 +7,22 @@ using System.Threading.Tasks;
 using System.Device.Location;
 namespace CafeProject
 {
-    [Serializable]
     public class User
     {
         public String Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public GeoCoordinate Coordinates { get; set; }
-        public List<Building> Saved { get; set; }
-        public List<Building> UserSearches;
+        public List<Cafe> Saved { get; set; }
+        public List<Cafe> UserSearches;
 
         public User()
         {
             this.Email = "";
             this.Name = "";
             this.Password = "";
-            Saved = new List<Building>();
-            UserSearches = new List<Building>();
+            Saved = new List<Cafe>();
+            UserSearches = new List<Cafe>();
         }
 
         public User(string name, string email, string password)
@@ -35,20 +34,20 @@ namespace CafeProject
             this.Email = email;
             this.Name = name;
             this.Password = password;
-            Saved = new List<Building>();
-            UserSearches = new List<Building>();
+            Saved = new List<Cafe>();
+            UserSearches = new List<Cafe>();
         }
 
-        public void Save(Building b)
+        public void Save(Cafe b)
         {
             if (this.Saved.IndexOf(b) == -1)
                 this.Saved.Add(b);
         }
 
-        public virtual List<Building> Nearby(int distanceInMeters)
+        public virtual List<Cafe> Nearby(int distanceInMeters)
         {
-            List<Building> nearbyBuildings = new List<Building>();
-            foreach (Building b in MyMap.AllBuildings)
+            List<Cafe> nearbyBuildings = new List<Cafe>();
+            foreach (Cafe b in MyMap.AllCafes)
             {
                 if (this.Coordinates.GetDistanceTo(b.Coordinates) <= distanceInMeters)
                     nearbyBuildings.Add(b);

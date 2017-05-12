@@ -8,11 +8,11 @@ using System.Device.Location;
 namespace CafeProject
 {
 
-    struct OpenTimes
+    public struct OpenTimes
     {
         public DayOfWeek Day { get; set; }
         public TimeSpan OpeningTime { get; set; }
-        public TimeSpan ClosingingTime { get; set; }
+        public TimeSpan ClosingTime { get; set; }
 
         public OpenTimes(DayOfWeek day, String openingtime, String closingTime)
         {
@@ -20,13 +20,13 @@ namespace CafeProject
             string[] closingT = openingtime.Split(':');
 
             this.OpeningTime = new TimeSpan(int.Parse(openingT[0]), int.Parse(openingT[1]), 0);
-            this.ClosingingTime = new TimeSpan(int.Parse(closingT[0]), int.Parse(closingT[1]), 0);
+            this.ClosingTime = new TimeSpan(int.Parse(closingT[0]), int.Parse(closingT[1]), 0);
             this.Day = day;
         }
 
         public override string ToString()
         {
-            return this.Day + " " + OpeningTime + " - " + ClosingingTime;
+            return this.Day + " " + OpeningTime + " - " + ClosingTime;
         }
     }
 
@@ -34,9 +34,9 @@ namespace CafeProject
     {
 
         //properties
-        public virtual string Type { get; protected set; }
-        public virtual Address BulidingAddress { get; protected set; }
-        public virtual GeoCoordinate Coordinates { get; protected set; }
+        public virtual string Type { get;  set; }
+        public virtual Address BulidingAddress { get;  set; }
+        public virtual GeoCoordinate Coordinates { get;  set; }
         public virtual string Name { get; set; }
 
 
@@ -51,17 +51,17 @@ namespace CafeProject
         }
 
         //Methods
-        public virtual List<Building> Nearby(int distanceInMeters)
-        {
-            List<Building> nearbyBuildings = new List<Building>();
-            foreach (Building b in MyMap.AllBuildings)
-            {
-                if (this.Coordinates.GetDistanceTo(b.Coordinates) <= distanceInMeters)
-                    nearbyBuildings.Add(b);
-            }
+        //public virtual List<Building> Nearby(int distanceInMeters)
+        //{
+        //    List<Building> nearbyBuildings = new List<Building>();
+        //    foreach (Building b in MyMap.AllCafes)
+        //    {
+        //        if (this.Coordinates.GetDistanceTo(b.Coordinates) <= distanceInMeters)
+        //            nearbyBuildings.Add(b);
+        //    }
 
-            return nearbyBuildings;
-        }
+        //    return nearbyBuildings;
+        //}
 
         public virtual double Directions(Building building)
         {

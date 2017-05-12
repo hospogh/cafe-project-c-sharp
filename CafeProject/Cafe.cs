@@ -7,9 +7,9 @@ using System.Device.Location;
 
 namespace CafeProject
 {
-    sealed class Cafe : Building
+    public class Cafe : Building
     {
-        private static List<Building> allCafes = new List<Building>();
+        public static List<Cafe> allCafes = new List<Cafe>();
 
         //properties
         public override string Name { get; set; }
@@ -18,12 +18,13 @@ namespace CafeProject
         public AllRates CafeRates { get; set; }
         public OpenTimes[] OpenTimes { get; set; }
         public String OpeningStatus { get { return IsOpen() ? "Open now " : "Close now"; } }
-        public override Address BulidingAddress { get; protected set; }
-        public override GeoCoordinate Coordinates { get; protected set; }
-        public static List<Building> AllCafes { get; private set; }
+        public override Address BulidingAddress { get; set; }
+        public override GeoCoordinate Coordinates { get; set; }
+        public static List<Cafe> AllCafes { get; set; }
 
         //constructors
-        public Cafe(Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, string name, string telephone = "", string link = "") : base(buildingAddress, cordinates, "Coffe", name)
+        public Cafe() { }
+        public Cafe(Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, string name, string telephone = "", string link = "")
         {
             this.CafeRates = new AllRates();
             this.Name = name;
@@ -32,7 +33,7 @@ namespace CafeProject
             this.Link = link;
             allCafes.Add(this);
         }
-        public Cafe(string name, Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, AllRates coffeRates, string telephone = "", string link = "") : base(buildingAddress, cordinates, "Coffe", name)
+        public Cafe(string name, Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, AllRates coffeRates, string telephone = "", string link = "")
         {
             this.CafeRates = coffeRates;
             this.Name = name;
@@ -51,7 +52,7 @@ namespace CafeProject
                 if (now.DayOfWeek.ToString().Equals(dayOfWeek))
                 {
                     int day = (int)(DayOfWeek)Enum.Parse(typeof(DayOfWeek), dayOfWeek);
-                    if (now.TimeOfDay.CompareTo(OpenTimes[day].OpeningTime) == 1 && now.TimeOfDay.CompareTo(OpenTimes[day].ClosingingTime) == -1)
+                    if (now.TimeOfDay.CompareTo(OpenTimes[day].OpeningTime) == 1 && now.TimeOfDay.CompareTo(OpenTimes[day].ClosingTime) == -1)
                         return true;
                     else
                         return false;
@@ -60,9 +61,16 @@ namespace CafeProject
             return false;
         }
 
-        public override List<Building> Nearby(int distanceInMeters)
+        public new List<Cafe> Nearby(int distanceInMeters)
         {
-            return base.Nearby(distanceInMeters);
+            List<Cafe> nearbyBuildings = new List<Cafe>();
+            foreach (Cafe b in MyMap.AllCafes)
+            {
+                if (this.Coordinates.GetDistanceTo(b.Coordinates) <= distanceInMeters)
+                    nearbyBuildings.Add(b);
+            }
+
+            return nearbyBuildings;
         }
         public void Print()
         {
@@ -71,9 +79,9 @@ namespace CafeProject
         }
         //public void AddPopularity(){Popularity++;}
 
-        public override double Directions(Building building)
+        public double Directions(Cafe building)
         {
-            return base.Directions(building);
+            return this.Coordinates.GetDistanceTo(building.Coordinates);
         }
 
         public override string ToString()
@@ -91,7 +99,7 @@ namespace CafeProject
 
         }
 
-        public override void AddRate(UserRating rate)
+        public void AddRate(UserRating rate)
         {
             CafeRates.Ratings.Add(rate);
             switch (rate.UserRate)

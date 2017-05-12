@@ -30,11 +30,11 @@ namespace CafeProject
     {
         private const string userPath = @"../../users.json";
         private const string buildingPath = @"../../buildings.json";
-        private static List<Building> allBuildings = new List<Building>();
-        public static List<Building> AllBuildings
+        private static List<Cafe> allCafes = new List<Cafe>();
+        public static List<Cafe> AllCafes
         {
-            get { return allBuildings; }
-            set { allBuildings = value; }
+            get { return allCafes; }
+            set { allCafes = value; }
         }
         private static List<User> allUsers = new List<User>();
         public static List<User> AllUsers
@@ -45,7 +45,7 @@ namespace CafeProject
         static public void MyConsole()
         {
             allUsers = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(userPath));
-            allBuildings = JsonConvert.DeserializeObject<List<Building>>(File.ReadAllText(buildingPath));
+            allCafes = JsonConvert.DeserializeObject<List<Cafe>>(File.ReadAllText(buildingPath));
             int i;
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             Console.WriteLine("Every line can contain only one command");
@@ -57,9 +57,9 @@ namespace CafeProject
             Console.WriteLine();
             Command command = Command.nothing;
             Command previousCommand = Command.nothing;
-            Building selectedBuilding = null;
+            Cafe selectedBuilding = null;
             User myUser = null;
-            List<Building> foundBuildings = new List<Building>();
+            List<Cafe> foundBuildings = new List<Cafe>();
             while (command != Command.exit)
             {
                 if (selectedBuilding != null)
@@ -284,8 +284,8 @@ namespace CafeProject
                             {
                                 try
                                 {
-                                    List<Building> nearbyBuildings = myUser.Nearby(int.Parse(line.Split()[1]));
-                                    foreach (Building b in nearbyBuildings)
+                                    List<Cafe> nearbyBuildings = myUser.Nearby(int.Parse(line.Split()[1]));
+                                    foreach (Cafe b in nearbyBuildings)
                                     {
                                         Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
                                     }
@@ -299,8 +299,8 @@ namespace CafeProject
                             {
                                 try
                                 {
-                                    List<Building> nearbyBuildings = selectedBuilding.Nearby(int.Parse(line));
-                                    foreach (Building b in nearbyBuildings)
+                                    List<Cafe> nearbyBuildings = selectedBuilding.Nearby(int.Parse(line));
+                                    foreach (Cafe b in nearbyBuildings)
                                     {
                                         Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
                                     }
@@ -326,7 +326,7 @@ namespace CafeProject
                             }
                             break;
                         case Command.mySavedCafes:
-                            foreach (Building b in myUser.Saved)
+                            foreach (Cafe b in myUser.Saved)
                             {
                                 Console.WriteLine(b);
                             }
@@ -335,21 +335,9 @@ namespace CafeProject
                 }
             }
             Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            File.WriteAllText(buildingPath, JsonConvert.SerializeObject(allBuildings));
+            File.WriteAllText(buildingPath, JsonConvert.SerializeObject(allCafes));
             File.WriteAllText(userPath, JsonConvert.SerializeObject(allUsers));
         }
-
-        public static double Directions(Building building1, Building building2)
-        {
-            return building1.Coordinates.GetDistanceTo(building2.Coordinates);
-        }
-
-        static private void AllComandes()
-        {
-
-        }
-
-
 
         //Detecting Command in line
         private static Command DetectCommand(String line)
@@ -364,10 +352,10 @@ namespace CafeProject
             }
             return Command.nothing;
         }
-        public static List<Building> Search(String nameOfCafe)
+        public static List<Cafe> Search(String nameOfCafe)
         {
-            List<Building> searchedBuildings = new List<Building>();
-            foreach (Building b in allBuildings)
+            List<Cafe> searchedBuildings = new List<Cafe>();
+            foreach (Cafe b in allCafes)
             {
                 string name = b.Name.ToLower();
                 string cafeName = nameOfCafe.ToLower();
@@ -379,10 +367,10 @@ namespace CafeProject
             return searchedBuildings;
         }
 
-        public static List<Building> SearchBuildingsWithSimilarName(String nameOfCafe)
+        public static List<Cafe> SearchBuildingsWithSimilarName(String nameOfCafe)
         {
-            List<Building> searchedBuildings = new List<Building>();
-            foreach (Building b in allBuildings)
+            List<Cafe> searchedBuildings = new List<Cafe>();
+            foreach (Cafe b in allCafes)
             {
                 string name = b.Name.ToLower();
                 string cafeName = nameOfCafe.ToLower();

@@ -1,32 +1,10 @@
 [
   {
-    "UserSearches": [ ],
-    "Name": "hospogh",
+    "Coordinates": null,
     "Email": "hospogh@gmail.com",
+    "Name": "hospogh",
     "Password": "alahakbar",
-    "Coordinates": null,
-    "Saved": [
-      {
-        "Type": null,
-        "BulidingAddress": null,
-        "Coordinates": null,
-        "Name": "Jazzve"
-      }
-    ]
-  },
-  {
-    "Coordinates": null,
-    "Email": "anahit@gmail.com",
-    "Name": "AN",
-    "Password": "asdf",
-    "Saved": [
-      {
-        "Type": null,
-        "BulidingAddress": null,
-        "Coordinates": null,
-        "Name": "Jose"
-      }
-    ],
+    "Saved": [ ],
     "UserSearches": [ ]
   }
 ]

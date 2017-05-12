@@ -62,6 +62,7 @@
     <None Include="buildings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="allCafes.json" />
     <None Include="packages.config" />
     <None Include="users.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
