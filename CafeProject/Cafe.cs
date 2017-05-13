@@ -95,6 +95,14 @@ namespace CafeProject
             }
 
             res += this.CafeRates + "\n";
+            foreach (var r in CafeRates.Ratings)
+            {
+                if (r.UserReview != "")
+                {
+                    res += r.User.Name + "\n";
+                    res += r.UserReview + "\n";
+                }
+            }
 
             return res;
 

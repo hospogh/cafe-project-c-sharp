@@ -16,9 +16,9 @@ namespace CafeProject
     }
     public class UserRating
     {
-        public String Name { get; private set; }
-        public Rate UserRate { get; private set; }
-        public String UserReview { get; private set; }
+        public String Name { get; set; }
+        public Rate UserRate { get; set; }
+        public String UserReview { get; set; }
         public User User { get; set; }
 
         public UserRating(User user, Rate rate, String review = "")  
@@ -41,7 +41,7 @@ namespace CafeProject
 
     public class AllRates
     {
-        public List<UserRating> Ratings { get; private set; }
+        public List<UserRating> Ratings { get; set; }
         public int[] CountsOfRates { get; set; }
         public int CountOfRaters
         {
@@ -79,7 +79,7 @@ namespace CafeProject
             this.CountsOfRates = new int[6];
             Ratings = new List<UserRating>();
         }
-        public AllRates(List<UserRating> rates) : base()        // ????
+        public AllRates(List<UserRating> rates) : base()  
         {
             foreach (var r in rates)
             {

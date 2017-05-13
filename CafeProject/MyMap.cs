@@ -59,21 +59,31 @@ namespace CafeProject
             Command previousCommand = Command.nothing;
             Cafe selectedBuilding = null;
             User myUser = null;
-            List<Cafe> foundBuildings = new List<Cafe>();
             while (command != Command.exit)
             {
                 if (selectedBuilding != null)
                 {
-                    Console.WriteLine(">>Cafe: " + selectedBuilding.Name);
-                    Console.WriteLine("Address: " + selectedBuilding.BulidingAddress.City + ", " + selectedBuilding.BulidingAddress.Street);
-                    Console.WriteLine("Location: " + selectedBuilding.Coordinates.Latitude + ", " + selectedBuilding.Coordinates.Longitude);
+                    Console.Write(">>Cafe: " + selectedBuilding.Name + "\n");
+                    Console.Write("  Address: " + selectedBuilding.BulidingAddress.City + ", " + selectedBuilding.BulidingAddress.Street + "\t");
                 }
                 if (myUser != null)
                 {
-                    Console.WriteLine(">>User: " + myUser.Email + "\n");
+                    Console.Write("\n>>User: " + myUser.Email + "\t");
                 }
                 previousCommand = command;
-                String line = Console.ReadLine();
+                String line;
+                if (myUser != null)
+                {
+                    line = Console.ReadLine().Replace(">>User: " + myUser.Email, "");
+                }
+                else if (selectedBuilding != null)
+                {
+                    line = Console.ReadLine().Replace("Address: " + selectedBuilding.BulidingAddress.City + ", " + selectedBuilding.BulidingAddress.Street, "");
+                }
+                else
+                {
+                    line = Console.ReadLine();
+                }
                 command = DetectCommand(line);
                 line = line.Replace(command.ToString(), "").Trim();
                 if (command == Command.nothing)
@@ -85,60 +95,11 @@ namespace CafeProject
                     switch (command)
                     {
                         case Command.search:
-                            foundBuildings.Clear();
-                            foundBuildings = Search(line);
-                            if (foundBuildings.Count == 1)
+                            selectedBuilding = Search(line);
+                            if (selectedBuilding != null)
                             {
-                                selectedBuilding = foundBuildings[0];
-                                Console.WriteLine("\n" + selectedBuilding + "\n");
-                            }
-                            else if (foundBuildings.Count > 1)
-                            {
-                                Console.WriteLine("\nThere are several buildings with this name:\n");
-                                for (i = 0; i < foundBuildings.Count; i++)
-                                {
-                                    Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
-                                }
-                                Console.WriteLine("Which one did you mean ? \n");
-                                string choose = Console.ReadLine();
-                                if (int.Parse(choose) > foundBuildings.Count || int.Parse(choose) < 1)
-                                {
-                                    Console.WriteLine("There is incorrect number. \n");
-                                }
-                                else
-                                {
-                                    selectedBuilding = foundBuildings[int.Parse(choose) - 1];
-                                    Console.WriteLine(selectedBuilding + "\n");
-                                }
-                            }
-                            else if (foundBuildings.Count == 0)
-                            {
-                                foundBuildings.Clear();
-                                foundBuildings = SearchBuildingsWithSimilarName(line);
-                                if (foundBuildings.Count != 0)
-                                {
-                                    Console.WriteLine("\nThere are several buildings with similar name:\n");
-                                    for (i = 0; i < foundBuildings.Count; i++)
-                                    {
-                                        Console.WriteLine(i + 1 + " " + foundBuildings[i].Name + "Address: " + foundBuildings[i].BulidingAddress + "\n");
-                                    }
-                                    Console.WriteLine("Which one did you mean ? \n");
-                                    string choose = Console.ReadLine();
-                                    if (int.Parse(choose) > foundBuildings.Count || int.Parse(choose) < 1)
-                                    {
-                                        Console.WriteLine("There is incorrect number. \n");
-                                    }
-                                    else
-                                    {
-                                        selectedBuilding = foundBuildings[int.Parse(choose) - 1];
-                                        //Console.WriteLine(selectedBuilding + "\n");
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("\nThere are no buildings with similar name. \n ");
-                                }
-                            }
+                                Console.WriteLine(selectedBuilding);
+                            }   
                             break;
                         case Command.signUp:
                             Console.Write("Name: ");
@@ -206,7 +167,7 @@ namespace CafeProject
                                 }
                                 if (i == allUsers.Count)
                                 {
-                                    Console.WriteLine("There is no user with this email. You must sign up at first.");
+                                    Console.WriteLine("There is no user with this email.");
                                 }
                                 else
                                 {
@@ -231,17 +192,17 @@ namespace CafeProject
                                         }
                                     }
                                     while (key.Key != ConsoleKey.Enter);
-                                    if (myUser.Password != Encode.Encrypt(password))
-                                    {
-                                        Console.WriteLine("incorrect password");
-                                        myUser = null;
-                                    }
+                                    //if (myUser.Password != Encode.Encrypt(password))
+                                    //{
+                                    //    Console.WriteLine("\nIncorrect password.");
+                                    //    myUser = null;
+                                    //}
                                     Console.WriteLine();
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("You are already logged in");
+                                Console.WriteLine("You are already logged in.");
                             }
                             break;
                         case Command.logOut:
@@ -360,34 +321,107 @@ namespace CafeProject
             }
             return Command.nothing;
         }
-        public static List<Cafe> Search(String nameOfCafe)
+        public static Cafe Search(String nameOfCafe)
         {
-            List<Cafe> searchedBuildings = new List<Cafe>();
+            List<Cafe> foundBuildings = new List<Cafe>();
             foreach (Cafe b in allCafes)
             {
                 string name = b.Name.ToLower();
                 string cafeName = nameOfCafe.ToLower();
                 if (name.Equals(cafeName))
                 {
-                    searchedBuildings.Add(b);
+                    foundBuildings.Add(b);
                 }
             }
-            return searchedBuildings;
-        }
-
-        public static List<Cafe> SearchBuildingsWithSimilarName(String nameOfCafe)
-        {
-            List<Cafe> searchedBuildings = new List<Cafe>();
-            foreach (Cafe b in allCafes)
+            if (foundBuildings.Count == 1)
             {
-                string name = b.Name.ToLower();
-                string cafeName = nameOfCafe.ToLower();
-                if (name.Contains(cafeName))
+                return foundBuildings[0];
+            }
+            else if (foundBuildings.Count > 1)
+            {
+                Console.WriteLine("\nThere are several buildings with this name:\n");
+                for (int i = 0; i < foundBuildings.Count; i++)
                 {
-                    searchedBuildings.Add(b);
+                    Console.WriteLine(i + 1 + ". " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
+                }
+                Console.WriteLine("Which one did you mean ? \n");
+                string choose = Console.ReadLine();
+                bool b = true;
+                while (b == true)
+                {
+                    try
+                    {
+                        int num = int.Parse(choose);
+                        if (num > foundBuildings.Count || num < 1)
+                        {
+                            Console.WriteLine("There is incorrect number. \n");
+                            choose = Console.ReadLine();
+                        }
+                        else
+                        {
+                            b = false;
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Write the number of cafe you want to choose.");
+                        choose = Console.ReadLine();
+                    }
+
+                }
+                return foundBuildings[int.Parse(choose) - 1];
+            }
+            else
+            {
+                foreach (Cafe b in allCafes)
+                {
+                    string name = b.Name.ToLower();
+                    string cafeName = nameOfCafe.ToLower();
+                    if (name.Contains(cafeName))
+                    {
+                        foundBuildings.Add(b);
+                    }
+                }
+                if (foundBuildings.Count != 0)
+                {
+                    Console.WriteLine("\nThere are several buildings with similar name:\n");
+                    for (int i = 0; i < foundBuildings.Count; i++)
+                    {
+                        Console.WriteLine(i + 1 + ". " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
+                    }
+                    Console.WriteLine("Which one did you mean ? \n");
+                    string choose = Console.ReadLine();
+                    bool b = true;
+                    while (b == true)
+                    {
+                        try
+                        {
+                            int num = int.Parse(choose);
+                            if (num > foundBuildings.Count || num < 1)
+                            {
+                                Console.WriteLine("There is incorrect number. \n");
+                                choose = Console.ReadLine();
+                            }
+                            else
+                            {
+                                b = false;
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Write the number of cafe you want to choose.");
+                            choose = Console.ReadLine();
+                        }
+
+                    }
+                    return foundBuildings[int.Parse(choose) - 1];
+                }
+                else
+                {
+                    Console.WriteLine("\nThere are no buildings with similar name. \n ");
+                    return null;
                 }
             }
-            return searchedBuildings;
         }
 
         public static void PrintAllCommandes()
@@ -405,12 +439,3 @@ namespace CafeProject
     }
 }
 
-/*
- * user sign up ?
- * user log in ?
- * search simialr names +
- * user geolocation +?
- * rate, review +
- * directions ???
- * nearby with given distance +
-*/

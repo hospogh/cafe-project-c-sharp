@@ -1,18 +1,1 @@
-[
-  {
-    "Coordinates": null,
-    "Email": "maneh.harutyunyan@gmail.com",
-    "Name": "Maneh",
-    "Password": "1111",
-    "Saved": [ ],
-    "UserSearches": [ ]
-  },
-  {
-    "UserSearches": [ ],
-    "Name": "hosp",
-    "Email": "hovseppog@gmail.com",
-    "Password": "alah",
-    "Coordinates": null,
-    "Saved": [ ]
-  }
-]
+[{"UserSearches":[],"Name":"Maneh","Email":"maneh.harutyunyan@gmail.com","Password":"1111","Coordinates":null,"Saved":[]},{"UserSearches":[],"Name":"hosp","Email":"hovseppog@gmail.com","Password":"alah","Coordinates":null,"Saved":[]},{"UserSearches":[],"Name":"An","Email":"anahitmart@gmail.com","Password":"aaaaa","Coordinates":null,"Saved":[]}]
