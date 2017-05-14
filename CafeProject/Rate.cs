@@ -41,6 +41,7 @@ namespace CafeProject
 
     public class AllRates
     {
+        private int countOfRaters;
         public List<UserRating> Ratings { get; set; }
         public int[] CountsOfRates { get; set; }
         public int CountOfRaters
@@ -53,6 +54,10 @@ namespace CafeProject
                     count += c;
                 }
                 return count;
+            }
+            set
+            {
+                this.countOfRaters = value;
             }
         }
         public double RatingAverage

@@ -80,16 +80,16 @@ namespace CafeProject
         //search
         private static List<Cafe> StrictSearch(string cafeName)
         {
-            List<Cafe> foundedCafes = new List<Cafe>();
+            List<Cafe> foundCafes = new List<Cafe>();
             foreach (Cafe b in allCafes)
             {
                 string name = b.Name.ToLower();
                 if (name.Equals(cafeName))
                 {
-                    foundedCafes.Add(b);
+                    foundCafes.Add(b);
                 }
             }
-            return foundedCafes;
+            return foundCafes;
         }
         private static List<Cafe> NonstrictSearch(string cafeName)
         {
@@ -108,11 +108,11 @@ namespace CafeProject
         {
             for (int i = 0; i < foundedCafes.Count; i++)
             {
-                Console.WriteLine("{0}. {1}\nAddress: {2}", i, foundedCafes[i].Name, foundedCafes[i].BulidingAddress + "\n");
+                Console.WriteLine("{0}. {1}\nAddress: {2}", i + 1, foundedCafes[i].Name, foundedCafes[i].BulidingAddress + "\n");
             }
         }
 
-        private static int GetNumberFromUser(int foundedCafesCount)
+        private static int GetNumberFromUser(int foundCafesCount)
         {
             int num;
             while (true)
@@ -120,7 +120,7 @@ namespace CafeProject
                 try
                 {
                     num = int.Parse(Console.ReadLine());
-                    if (num >= foundedCafesCount || num < 0)
+                    if (num > foundCafesCount || num <= 0)
                     {
                         Console.WriteLine("There is incorrect number. \n>> ");
                     }
@@ -131,7 +131,7 @@ namespace CafeProject
                     Console.WriteLine("Write the number of cafe you want to choose.\n>> ");
                 }
             }
-            return num;
+            return num - 1;
         }
         public static Cafe Search(String cafeName)
         {
@@ -149,6 +149,30 @@ namespace CafeProject
             Console.WriteLine("\nThere are no buildings with this or similar name. \n ");
             return null;
         }
+
+        public static void Rate(string line, Cafe selectedBuilding, User user)
+        {
+            if (line[0] - '0' > 5 || line[0] - '0' < 1)
+            {
+                Console.WriteLine("Your rate must be from 1 to 5.");
+            }
+            else
+            {
+                for (int i = 0; i < selectedBuilding.CafeRates.Ratings.Count; i++)
+                {
+                    if (selectedBuilding.CafeRates.Ratings[i].User.Email == user.Email)
+                    {
+                        selectedBuilding.CafeRates.CountOfRaters--;
+                        selectedBuilding.CafeRates.CountsOfRates[(int)selectedBuilding.CafeRates.Ratings[i].UserRate]--;
+                        selectedBuilding.CafeRates.Ratings.Remove(selectedBuilding.CafeRates.Ratings[i]);
+                    }
+
+                }
+                UserRating rate = new UserRating(user, (Rate)(line[0] - '0'), line.Substring(1).Trim());
+                selectedBuilding.AddRate(rate);
+            }
+        }
+
         //General function
         public static void MyConsole()
         {
@@ -299,11 +323,6 @@ namespace CafeProject
                                         }
                                     }
                                     while (key.Key != ConsoleKey.Enter);
-                                    //if (myUser.Password != Encode.Encrypt(password))
-                                    //{
-                                    //    Console.WriteLine("\nIncorrect password.");
-                                    //    myUser = null;
-                                    //}
                                     Console.WriteLine();
                                 }
                             }
@@ -339,15 +358,7 @@ namespace CafeProject
                                 }
                                 else
                                 {
-                                    if (line[0] - '0' > 5 || line[0] - '0' < 1)
-                                    {
-                                        Console.WriteLine("Your rate must be from 1 to 5.");
-                                    }
-                                    else
-                                    {
-                                        UserRating rate = new UserRating(myUser, (Rate)(line[0] - '0'), line.Remove(0).Trim());
-                                        selectedBuilding.AddRate(rate);
-                                    }
+                                    Rate(line, selectedBuilding, myUser);
                                 }
                             }
                             else
