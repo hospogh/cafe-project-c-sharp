@@ -18,30 +18,19 @@ namespace CafeProject
         public AllRates CafeRates { get; set; }
         public OpenTimes[] OpenTimes { get; set; }
         public String OpeningStatus { get { return IsOpen() ? "Open now " : "Close now"; } }
-        public override Address BulidingAddress { get; set; }
+        public override Address Address { get; set; }
         public override GeoCoordinate Coordinates { get; set; }
         public static List<Cafe> AllCafes { get; set; }
 
         //constructors
         public Cafe() { }
         public Cafe(Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, string name, string telephone = "", string link = "")
+            : base(buildingAddress, cordinates, "cafe", name)
         {
-            this.BulidingAddress = buildingAddress;
             this.CafeRates = new AllRates();
-            this.Name = name;
             this.OpenTimes = openTimes;
             this.Telephone = telephone;
             this.Link = link;
-            allCafes.Add(this);
-        }
-        public Cafe(string name, Address buildingAddress, GeoCoordinate cordinates, OpenTimes[] openTimes, AllRates coffeRates, string telephone = "", string link = "")
-        {
-            this.CafeRates = coffeRates;
-            this.Name = name;
-            this.OpenTimes = openTimes;
-            this.Telephone = telephone;
-            this.Link = link;
-            allCafes.Add(this);
         }
         //methods
 
@@ -62,7 +51,7 @@ namespace CafeProject
             return false;
         }
 
-        public new List<Cafe> Nearby(int distanceInMeters)
+        public List<Cafe> Nearby(int distanceInMeters)
         {
             List<Cafe> nearbyBuildings = new List<Cafe>();
             foreach (Cafe b in MyMap.AllCafes)
@@ -76,7 +65,7 @@ namespace CafeProject
         public void Print()
         {
             Console.WriteLine("Caffe Name: {0}\nCaffe Address: {1}\nRating: {4}\nCaffe Link: {2}\nCaffe Telephone: {3}",
-                 Name, BulidingAddress, Link, Telephone, CafeRates.RatingAverage);
+                 Name, Address, Link, Telephone, CafeRates.RatingAverage);
         }
         //public void AddPopularity(){Popularity++;}
 
@@ -88,7 +77,7 @@ namespace CafeProject
         public override string ToString()
         {
             string res = "";
-            res += this.Name + "\nAddress: " + this.BulidingAddress + "\nWebsite:" + this.Link + "\nTelephone: " + this.Telephone + "\n" + this.OpeningStatus + "\n";
+            res += this.Name + "\nAddress: " + this.Address + "\nWebsite:" + this.Link + "\nTelephone: " + this.Telephone + "\n" + this.OpeningStatus + "\n";
             foreach (OpenTimes openT in OpenTimes)
             {
                 res += openT + "\n";

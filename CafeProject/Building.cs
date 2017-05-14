@@ -35,7 +35,7 @@ namespace CafeProject
 
         //properties
         public virtual string Type { get;  set; }
-        public virtual Address BulidingAddress { get;  set; }
+        public virtual Address Address { get;  set; }
         public virtual GeoCoordinate Coordinates { get;  set; }
         public virtual string Name { get; set; }
  
@@ -44,7 +44,7 @@ namespace CafeProject
         public Building(Address buildingAddress, GeoCoordinate cordinates, string type = "", string name = "")
         {
             this.Name = name;
-            this.BulidingAddress = buildingAddress;
+            this.Address = buildingAddress;
             this.Coordinates = cordinates;
             this.Type = type;
         }
