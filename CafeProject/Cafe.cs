@@ -88,8 +88,8 @@ namespace CafeProject
             {
                 if (r.UserReview != "")
                 {
-                    res += r.User.Name + "\n";
-                    res += r.UserReview + "\n";
+                    res += r.User.Name + " " + (int)r.UserRate + "\n";
+                    res += "Review: " + r.UserReview + "\n";
                 }
             }
 
