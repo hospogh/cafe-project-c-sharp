@@ -45,8 +45,6 @@ namespace CafeProject
             MyMap.AllCafes.Add(building3);
             MyMap.AllCafes.Add(building4);
             MyMap.MyConsole();
-
-
         }
     }
 }

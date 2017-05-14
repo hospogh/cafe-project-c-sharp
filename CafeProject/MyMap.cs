@@ -30,6 +30,8 @@ namespace CafeProject
 
     public static class MyMap
     {
+        //Console style command prefix
+        private static string commandPrefix;
         //Files paterns for serialization
         private const string userPath = @"../../users.json";
         private const string buildingPath = @"../../buildings.json";
@@ -74,107 +76,78 @@ namespace CafeProject
             }
             Console.WriteLine();
         }
-        public static Cafe Search(String nameOfCafe)
+
+        //search
+        private static List<Cafe> StrictSearch(string cafeName)
         {
-            List<Cafe> foundBuildings = new List<Cafe>();
+            List<Cafe> foundedCafes = new List<Cafe>();
             foreach (Cafe b in allCafes)
             {
                 string name = b.Name.ToLower();
-                string cafeName = nameOfCafe.ToLower();
                 if (name.Equals(cafeName))
                 {
-                    foundBuildings.Add(b);
+                    foundedCafes.Add(b);
                 }
             }
-            if (foundBuildings.Count == 1)
+            return foundedCafes;
+        }
+        private static List<Cafe> NonstrictSearch(string cafeName)
+        {
+            List<Cafe> foundedCafes = new List<Cafe>();
+            foreach (Cafe b in allCafes)
             {
-                return foundBuildings[0];
-            }
-            else if (foundBuildings.Count > 1)
-            {
-                Console.WriteLine("\nThere are several buildings with this name:\n");
-                for (int i = 0; i < foundBuildings.Count; i++)
+                string name = b.Name.ToLower();
+                if (name.Contains(cafeName))
                 {
-                    Console.WriteLine(i + 1 + ". " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
+                    foundedCafes.Add(b);
                 }
-                Console.WriteLine("Which one did you mean ? \n");
-                string choose = Console.ReadLine();
-                bool b = true;
-                while (b)
-                {
-                    try
-                    {
-                        int num = int.Parse(choose);
-                        if (num > foundBuildings.Count || num < 1)
-                        {
-                            Console.WriteLine("There is incorrect number. \n");
-                            choose = Console.ReadLine();
-                        }
-                        else
-                        {
-                            b = false;
-                        }
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Write the number of cafe you want to choose.");
-                        choose = Console.ReadLine();
-                    }
+            }
+            return foundedCafes;
+        }
+        private static void PrintFoundedCafes(List<Cafe> foundedCafes)
+        {
+            for (int i = 0; i < foundedCafes.Count; i++)
+            {
+                Console.WriteLine("{0}. {1}\nAddress: {2}", i, foundedCafes[i].Name, foundedCafes[i].BulidingAddress + "\n");
+            }
+        }
 
-                }
-                return foundBuildings[int.Parse(choose) - 1];
-            }
-            else
+        private static int GetNumberFromUser(int foundedCafesCount)
+        {
+            int num;
+            while (true)
             {
-                foreach (Cafe b in allCafes)
+                try
                 {
-                    string name = b.Name.ToLower();
-                    string cafeName = nameOfCafe.ToLower();
-                    if (name.Contains(cafeName))
+                    num = int.Parse(Console.ReadLine());
+                    if (num >= foundedCafesCount || num < 0)
                     {
-                        foundBuildings.Add(b);
+                        Console.WriteLine("There is incorrect number. \n>> ");
                     }
+                    else { break; }
                 }
-                if (foundBuildings.Count != 0)
+                catch
                 {
-                    Console.WriteLine("\nThere are several buildings with similar name:\n");
-                    for (int i = 0; i < foundBuildings.Count; i++)
-                    {
-                        Console.WriteLine(i + 1 + ". " + foundBuildings[i].Name + "\n" + "Address: " + foundBuildings[i].BulidingAddress + "\n");
-                    }
-                    Console.WriteLine("Which one did you mean ? \n");
-                    string choose = Console.ReadLine();
-                    bool b = true;
-                    while (b == true)
-                    {
-                        try
-                        {
-                            int num = int.Parse(choose);
-                            if (num > foundBuildings.Count || num < 1)
-                            {
-                                Console.WriteLine("There is incorrect number. \n");
-                                choose = Console.ReadLine();
-                            }
-                            else
-                            {
-                                b = false;
-                            }
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Write the number of cafe you want to choose.");
-                            choose = Console.ReadLine();
-                        }
-
-                    }
-                    return foundBuildings[int.Parse(choose) - 1];
-                }
-                else
-                {
-                    Console.WriteLine("\nThere are no buildings with similar name. \n ");
-                    return null;
+                    Console.WriteLine("Write the number of cafe you want to choose.\n>> ");
                 }
             }
+            return num;
+        }
+        public static Cafe Search(String cafeName)
+        {
+            cafeName = cafeName.ToLower();
+            List<Cafe> foundedCafes = StrictSearch(cafeName);
+            if (foundedCafes.Count == 0) { foundedCafes = NonstrictSearch(cafeName); }
+            if (foundedCafes.Count == 1) { return foundedCafes[0]; }
+            if (foundedCafes.Count > 1)
+            {
+                Console.WriteLine("\nThere are several buildings with this or simular name:\n");
+                PrintFoundedCafes(foundedCafes);
+                Console.Write("Which one did you mean ? \n>> ");
+                return foundedCafes[GetNumberFromUser(foundedCafes.Count)]; //GetNumberFromUser method get a only correct number
+            }
+            Console.WriteLine("\nThere are no buildings with this or similar name. \n ");
+            return null;
         }
         //General function
         public static void MyConsole()
