@@ -25,7 +25,8 @@ namespace CafeProject
         changeMyCoordinates,
         mySavedCafes,
         cafeInDestance,
-        exit
+        exit,
+        unselect
     }
 
 
@@ -304,7 +305,7 @@ namespace CafeProject
                     Console.WriteLine("Your rate must be from 1 to 5.");
                     return;
                 }
-                UserRating rate = new UserRating(currentUser, (Rate)(rateLine[0] - '0'), rateLine.Remove(0).Trim());
+                UserRating rate = new UserRating(currentUser, (Rate)(rateLine[0] - '0'), rateLine.Trim());
                 selectedBuilding.AddRate(rate);
                 return;
             }
@@ -428,6 +429,9 @@ namespace CafeProject
                         {
                             Console.WriteLine(b);
                         }
+                        break;
+                    case Command.unselect:
+                        selectedBuilding = null;
                         break;
                 }
 
