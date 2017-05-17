@@ -169,32 +169,6 @@ namespace CafeProject
             return null;
         }
 
-        public static void Rate(string line, Cafe selectedBuilding, User user)
-        {
-            if (line[0] - '0' > 5 || line[0] - '0' < 1)
-            {
-                Console.WriteLine("Your rate must be from 1 to 5.");
-            }
-            else
-            {
-                for (int i = 0; i < selectedBuilding.CafeRates.Ratings.Count; i++)
-                {
-                    if (selectedBuilding.CafeRates.Ratings[i].User.Email == user.Email)
-                    {
-                        selectedBuilding.CafeRates.CountOfRaters--;
-                        selectedBuilding.CafeRates.CountsOfRates[(int)selectedBuilding.CafeRates.Ratings[i].UserRate]--;
-                        selectedBuilding.CafeRates.Ratings.Remove(selectedBuilding.CafeRates.Ratings[i]);
-                    }
-
-                }
-                UserRating rate = new UserRating(user, (Rate)(line[0] - '0'), line.Substring(1).Trim());
-                selectedBuilding.AddRate(rate);
-            }
-        }
-
-        //General function
-        public static void MyConsole()
-
         //Command Prefix
         private static string CommandPrefix(User currentUser, Cafe selectedBuilding)
         {
@@ -250,171 +224,213 @@ namespace CafeProject
             return Encode.Encrypt(password);
         }
 
-                            for (i = 0; i < allUsers.Count; i++)
-                            {
-                                if (allUsers[i].Email == email)
-                                {
-                                    Console.WriteLine("This mail already exist.");
-                                    break;
-                                }
-                            }
-                            if (i == allUsers.Count)
-                            {
-                                myUser = new User(name, email, password);
-                                AllUsers.Add(myUser);
-                                Console.WriteLine("\nYou've successfully singed up.");
-                            }
-                            break;
-                        case Command.signIn:
-                            if (myUser == null)
-                            {
-                                Console.Write("Email: ");
-                                email = Console.ReadLine().Replace("Email: ", "");
-                                for (i = 0; i < allUsers.Count; i++)
-                                {
-                                    if (allUsers[i].Email == email)
-                                    {
-                                        myUser = allUsers[i];
-                                        break;
-                                    }
-                                }
-                                if (i == allUsers.Count)
-                                {
-                                    Console.WriteLine("There is no user with this email.");
-                                }
-                                else
-                                {
-                                    password = "";
-                                    Console.Write("Password: ");
+        public static User SignUp()
+        {
+            Console.Write("Name: ");
+            string name = Console.ReadLine().Replace("Name: ", "");
+            Console.Write("Email: ");
+            string email = Console.ReadLine().Replace("Email: ", "");
+            if (!IsCorrectGMail(email))
+            {
+                Console.WriteLine("Write right gmail account.");
+                return null;
+            }
+            if (UserWithEmail(email) != null)
+            {
+                Console.WriteLine("This mail already exist.");
+                return null;
+            }
+            string password = "";
+            Console.Write("Password: ");
+            password = GetPasswordFromUser();
+            User newUser = new User(name, email, password);
+            AllUsers.Add(newUser);
+            Console.WriteLine("\nYou've successfully singed up.");
+            return newUser;
+        }
 
-                                    do
-                                    {
-                                        key = Console.ReadKey(true);
-                                        if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
-                                        {
-                                            password += key.KeyChar;
-                                            Console.Write("*");
-                                        }
-                                        else
-                                        {
-                                            if (key.Key == ConsoleKey.Backspace && password.Length > 0)
-                                            {
-                                                password = password.Substring(0, (password.Length - 1));
-                                                Console.Write("\b \b");
-                                            }
-                                        }
-                                    }
-                                    while (key.Key != ConsoleKey.Enter);
-                                    //if (myUser.Password != Encode.Encrypt(password))
-                                    //{
-                                    //    Console.WriteLine("\nIncorrect password.");
-                                    //    myUser = null;
-                                    //}
-                                    Console.WriteLine();
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("You are already logged in.");
-                            }
-                            break;
-                        case Command.signOut:
-                            myUser = null;
-                            break;
-                        case Command.save:
-                            if (selectedBuilding != null)
-                            {
-                                if (myUser == null)
-                                {
-                                    Console.WriteLine("\nPlease log in. \n");
-                                }
-                                else
-                                {
-                                    myUser.Save(selectedBuilding);
-                                }
-                            }
-                            else
-                                Console.WriteLine("There is no selected building \n");
-                            break;
-                        case Command.rate:
-                            if (selectedBuilding != null)
-                            {
-                                if (myUser == null)
-                                {
-                                    Console.WriteLine("Please log in. \n");
-                                }
-                                else
-                                {
-                                    if (line[0] - '0' > 5 || line[0] - '0' < 1)
-                                    {
-                                        Console.WriteLine("Your rate must be from 1 to 5.");
-                                    }
-                                    else
-                                    {
-                                        UserRating rate = new UserRating(myUser, (Rate)(line[0] - '0'), line.Remove(0).Trim());
-                                        selectedBuilding.AddRate(rate);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("There is no selected building. \n");
-                            }
-                            break;
-                        case Command.nearby:
-                            if (line.Split()[0].ToLower() == "me")
-                            {
-                                try
-                                {
-                                    List<Cafe> nearbyBuildings = myUser.Nearby(int.Parse(line.Split()[1]));
-                                    foreach (Cafe b in nearbyBuildings)
-                                    {
-                                        Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
-                                    }
-                                }
-                                catch (FormatException)
-                                {
-                                    throw new Exception("Write correct distance.");
-                                }
-                            }
-                            else if (selectedBuilding != null)
-                            {
-                                try
-                                {
-                                    List<Cafe> nearbyBuildings = selectedBuilding.Nearby(int.Parse(line));
-                                    foreach (Cafe b in nearbyBuildings)
-                                    {
-                                        Console.WriteLine(b.Name + "\n" + "Address: " + b.BulidingAddress + "\n");
-                                    }
-                                }
-                                catch (FormatException)
-                                {
-                                    Console.WriteLine("Write correct distance.");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine();
-                            }
-                            break;
-                        case Command.changeMyCoordinates:
-                            if (myUser != null)
-                            {
-                                myUser.Coordinates = new GeoCoordinate(double.Parse(line.Split()[0]), double.Parse(line.Split()[1]));
-                            }
-                            else
-                            {
-                                Console.WriteLine("You must log in at first.");
-                            }
-                            break;
-                        case Command.mySavedCafes:
-                            foreach (Cafe b in myUser.Saved)
-                            {
-                                Console.WriteLine(b);
-                            }
-                            break;
+        //SignIn
+        public static User SignIn(User currentUser)
+        {
+            Console.Write("Email: ");
+            string email = Console.ReadLine().Replace("Email: ", "");
+            User foundedUser = UserWithEmail(email);
+            Console.Write("Password: ");
+            string password = GetPasswordFromUser();
+            Console.WriteLine();
+            if (foundedUser != null)
+            {
+                if (foundedUser.Password == password)
+                {
+                    return foundedUser;
+                }
+            }
+            Console.WriteLine("Incorrect email or password");
+            return null;
+        }
+
+        //Save
+        public static void Save(User currentUser, Cafe selectedBuilding)
+        {
+            if (selectedBuilding != null)
+            {
+                if (currentUser == null)
+                {
+                    Console.WriteLine("\nPlease log in. \n");
+                }
+                else
+                {
+                    currentUser.Save(selectedBuilding);
+                }
+            }
+            else
+            {
+                Console.WriteLine("There is no selected building \n");
+            }
+        }
+
+        //Rate
+        public static void Rate(User currentUser, Cafe selectedBuilding, string rateLine)
+        {
+            if (selectedBuilding != null)
+            {
+                if (currentUser == null)
+                {
+                    Console.WriteLine("Please log in. \n");
+                    return;
+                }
+                if (rateLine[0] - '0' > 5 || rateLine[0] - '0' < 1)
+                {
+                    Console.WriteLine("Your rate must be from 1 to 5.");
+                    return;
+                }
+                UserRating rate = new UserRating(currentUser, (Rate)(rateLine[0] - '0'), rateLine.Remove(0).Trim());
+                selectedBuilding.AddRate(rate);
+                return;
+            }
+            Console.WriteLine("There is no selected building. \n");
+        }
+
+        //cafesInDistance
+        //public static List<Cafe> CafesInDistance(User currentUser, string line)
+        //{
+        //    List<Cafe> searchList = new List<Cafe>();
+
+        //    return searchList;
+        //}
+
+        //Nearby
+        private static void Nearby(string line, User currentUser, Cafe selectedBuilding)
+        {
+            if (line.Split()[0].ToLower() == "me")
+            {
+                try
+                {
+                    List<Cafe> nearbyBuildings = currentUser.Nearby(int.Parse(line.Split()[1]));
+                    foreach (Cafe b in nearbyBuildings)
+                    {
+                        Console.WriteLine(b.Name + "\n" + "Address: " + b.Address + "\n");
                     }
                 }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Incorrect distance!!!");
+                    return;
+                }
+            }
+            else if (selectedBuilding != null)
+            {
+                try
+                {
+                    List<Cafe> nearbyBuildings = selectedBuilding.Nearby(int.Parse(line));
+                    foreach (Cafe b in nearbyBuildings)
+                    {
+                        Console.WriteLine(b.Name + "\n" + "Address: " + b.Address + "\n");
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Write correct distance.");
+                }
+            }
+            else
+            {
+                Console.WriteLine();
+            }
+        }
+
+        //General function
+        public static void MyConsole()
+        {
+            const string deviderTildes = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+            //Users and Cafes JSON deserialization
+            allUsers = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(userPath));
+            allCafes = JsonConvert.DeserializeObject<List<Cafe>>(File.ReadAllText(buildingPath));
+
+            Console.WriteLine(deviderTildes);
+            Console.WriteLine("Every line can contain only one command");
+            PrintAllCommandes();
+            Command command = Command.nothing;
+            Cafe selectedBuilding = null;
+            User currentUser = null;
+            while (command != Command.exit)
+            {
+                Console.Write(CommandPrefix(currentUser, selectedBuilding));
+                String line = Console.ReadLine();
+                command = DetectCommand(line);
+                line = line.Replace(command.ToString(), "").Trim();
+                if (command == Command.nothing)
+                {
+                    Console.WriteLine("Write correct command!!!\n");
+                    continue;
+                }
+                switch (command)
+                {
+                    case Command.search:
+                        selectedBuilding = Search(line);
+                        break;
+                    case Command.signUp:
+                        currentUser = SignUp();
+                        break;
+                    case Command.signIn:
+                        if (currentUser != null)
+                        {
+                            Console.WriteLine("You are already logged in.");
+                            break;
+                        }
+                        currentUser = SignIn(currentUser);
+                        break;
+                    case Command.signOut:
+                        currentUser = null;
+                        break;
+                    case Command.save:
+                        Save(currentUser, selectedBuilding);
+                        break;
+                    case Command.rate:
+                        Rate(currentUser, selectedBuilding, line);
+                        break;
+                    case Command.nearby:
+                        Nearby(line, currentUser, selectedBuilding);
+                        break;
+                    case Command.changeMyCoordinates:
+                        if (currentUser != null)
+                        {
+                            currentUser.Coordinates =
+                                new GeoCoordinate(double.Parse(line.Split()[0]), double.Parse(line.Split()[1]));
+                        }
+                        else
+                        {
+                            Console.WriteLine("You must log in at first.");
+                        }
+                        break;
+                    case Command.mySavedCafes:
+                        foreach (Cafe b in currentUser.Saved)
+                        {
+                            Console.WriteLine(b);
+                        }
+                        break;
+                }
+
             }
             Console.WriteLine(deviderTildes);
             //Users and Cafes JSON serialization
