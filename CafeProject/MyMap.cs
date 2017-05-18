@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Xml.Serialization;
 using System.Device.Location;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace CafeProject
@@ -25,8 +26,9 @@ namespace CafeProject
         changeMyCoordinates,
         mySavedCafes,
         cafeInDestance,
-        exit,
-        unselect
+        unselect,
+        addCafe,
+        exit
     }
 
 
@@ -34,27 +36,21 @@ namespace CafeProject
     {
         //Files paterns for serialization
         private const string userPath = @"../../users.json";
-
         private const string buildingPath = @"../../buildings.json";
-
         //Buildings
         private static List<Cafe> allCafes = new List<Cafe>();
-
         public static List<Cafe> AllCafes
         {
             get { return allCafes; }
             set { allCafes = value; }
         }
-
         //Users
         private static List<User> allUsers = new List<User>();
-
         public static List<User> AllUsers
         {
             get { return allUsers; }
             set { allUsers = value; }
         }
-
 
         /* Console */
         private static Command DetectCommand(String line)
@@ -69,7 +65,6 @@ namespace CafeProject
             }
             return Command.nothing;
         }
-
         public static void PrintAllCommandes()
         {
             Console.WriteLine("all commandes: ");
@@ -82,7 +77,6 @@ namespace CafeProject
             }
             Console.WriteLine();
         }
-
         //search
         private static List<Cafe> StrictSearch(string cafeName)
         {
@@ -97,7 +91,6 @@ namespace CafeProject
             }
             return foundCafes;
         }
-
         private static List<Cafe> NonstrictSearch(string cafeName)
         {
             List<Cafe> foundedCafes = new List<Cafe>();
@@ -111,7 +104,6 @@ namespace CafeProject
             }
             return foundedCafes;
         }
-
         private static void PrintFoundedCafes(List<Cafe> foundedCafes)
         {
             for (int i = 0; i < foundedCafes.Count; i++)
@@ -119,7 +111,6 @@ namespace CafeProject
                 Console.WriteLine("{0}. {1}\nAddress: {2}", i, foundedCafes[i].Name, foundedCafes[i].Address + "\n");
             }
         }
-
         private static int GetNumberFromUser(int foundCafesCount)
         {
             int num;
@@ -144,7 +135,6 @@ namespace CafeProject
             }
             return num - 1;
         }
-
         public static Cafe Search(String cafeName)
         {
             cafeName = cafeName.ToLower();
@@ -169,7 +159,6 @@ namespace CafeProject
             Console.WriteLine("\nThere are no buildings with this or similar name. \n ");
             return null;
         }
-
         //Command Prefix
         private static string CommandPrefix(User currentUser, Cafe selectedBuilding)
         {
@@ -182,13 +171,11 @@ namespace CafeProject
             }
             return commandPrefix + "$  ";
         }
-
         //Sign Up method return newUser
         private static bool IsCorrectGMail(String email)
         {
             return Regex.Replace(email, @"^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$", "").Equals("");
         }
-
         private static User UserWithEmail(String email)
         {
             foreach (User user in AllUsers)
@@ -200,7 +187,6 @@ namespace CafeProject
             }
             return null;
         }
-
         private static string GetPasswordFromUser()
         {
             string password = "";
@@ -224,7 +210,6 @@ namespace CafeProject
             } while (key.Key != ConsoleKey.Enter);
             return Encode.Encrypt(password);
         }
-
         public static User SignUp()
         {
             Console.Write("Name: ");
@@ -249,7 +234,6 @@ namespace CafeProject
             Console.WriteLine("\nYou've successfully singed up.");
             return newUser;
         }
-
         //SignIn
         public static User SignIn(User currentUser)
         {
@@ -269,7 +253,6 @@ namespace CafeProject
             Console.WriteLine("Incorrect email or password");
             return null;
         }
-
         //Save
         public static void Save(User currentUser, Cafe selectedBuilding)
         {
@@ -289,7 +272,6 @@ namespace CafeProject
                 Console.WriteLine("There is no selected building \n");
             }
         }
-
         //Rate
         public static void Rate(User currentUser, Cafe selectedBuilding, string rateLine)
         {
@@ -311,7 +293,6 @@ namespace CafeProject
             }
             Console.WriteLine("There is no selected building. \n");
         }
-
         //cafesInDistance
         //public static List<Cafe> CafesInDistance(User currentUser, string line)
         //{
@@ -359,7 +340,93 @@ namespace CafeProject
                 Console.WriteLine();
             }
         }
-
+        //AddCafe
+        private static OpenTimes[] SetOpenTimes(bool t)
+        {
+            Console.WriteLine("(in HH:mm format)");
+            OpenTimes[] op = new OpenTimes[7];
+            string line;
+            if (t)
+            {
+                try
+                {
+                    foreach (string dw in Enum.GetNames(typeof(DayOfWeek)))
+                    {
+                        Console.WriteLine(dw + ": ");
+                        Console.WriteLine("   openingTime: ");
+                        line = Console.ReadLine();
+                        Console.WriteLine("   closingTime: ");
+                        string line2 = Console.ReadLine();
+                        DayOfWeek dayw = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), dw);
+                        op[(int)dayw] = new OpenTimes(dayw, line, line2);
+                    }
+                    return op;
+                }
+                catch
+                {
+                    MessageBox.Show("Incorrect Times!!!");
+                }
+            }
+            foreach (string dw in Enum.GetNames(typeof(DayOfWeek)))
+            {
+                DayOfWeek dayw = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), dw);
+                op[(int)dayw] = new OpenTimes(dayw, "08:00", "20:00");
+            }
+            return op;
+        }
+        private static void AddCafe()
+        {
+            String[] lineSplit;
+            string line;
+            Console.Write("Name: ");
+            var name = Console.ReadLine();
+            Console.Write("Address(Countr City Street NumberOfBuilding): ");
+            lineSplit = (Console.ReadLine() + "           ").Split();
+            var address = new Address(lineSplit[3], lineSplit[2], lineSplit[1], lineSplit[0]);
+            GeoCoordinate coordinates;
+            try
+            {
+                Console.Write("Coordinates(Latitude Longitude): ");
+                lineSplit = Console.ReadLine().Split();
+                coordinates = new GeoCoordinate(double.Parse(lineSplit[0]), double.Parse(lineSplit[1]));
+            }
+            catch
+            {
+                MessageBox.Show("Coordinates is incorrect!!!");
+                return;
+            }
+            foreach (Cafe cafe in allCafes)
+            {
+                if (cafe.Address == address || cafe.Coordinates == coordinates)
+                {
+                    MessageBox.Show("Seted address or coordinates are incorrect(adr. or cord. is busy)!!!");
+                    return;
+                }
+            }
+            Console.WriteLine("Link: ");
+            var link = Console.ReadLine();
+            Console.WriteLine("Telephone: ");
+            var telephone = Console.ReadLine();
+            OpenTimes[] openTimeses = new OpenTimes[7];
+            Console.WriteLine("Set open times automaticly(08:00-20:00)?(Y/n)\n>> ");
+            line = Console.ReadLine().ToLower();
+            if (line == "n")
+            {
+                SetOpenTimes(true);
+            }
+            else if (line == "y")
+            {
+                SetOpenTimes(false);
+                Console.WriteLine("Open Times seted automaticly.");
+            }
+            else
+            {
+                MessageBox.Show("Answer is incorrect!!!");
+                return;
+            }
+            allCafes.Add(new Cafe(address, coordinates, openTimeses, name, telephone, link));
+            Console.WriteLine("Cafe added.");
+        }
         //General function
         public static void MyConsole()
         {
@@ -400,6 +467,22 @@ namespace CafeProject
                             break;
                         }
                         currentUser = SignIn(currentUser);
+                        break;
+                    case Command.addCafe:
+                        if (currentUser != null)
+                        {
+                            Console.Write("Password: ");
+                            string pass = GetPasswordFromUser();
+                            if (currentUser.Password == pass)
+                            {
+                                Console.WriteLine();
+                                AddCafe();
+                                break;
+                            }
+                            MessageBox.Show("Password is incorrect!!!");
+                            break;
+                        }
+                        MessageBox.Show("You aren't signed in!!!");
                         break;
                     case Command.signOut:
                         currentUser = null;
@@ -443,4 +526,3 @@ namespace CafeProject
         }
     }
 }
-
