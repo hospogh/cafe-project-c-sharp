@@ -25,9 +25,9 @@ namespace CafeProject
         removeAccount,
         changeMyCoordinates,
         mySavedCafes,
-        cafeInDestance,
         unselect,
         addCafe,
+        allCommands,
         exit
     }
 
@@ -165,9 +165,9 @@ namespace CafeProject
             string commandPrefix = (currentUser == null ? "" : currentUser.Email) + ":/GMaps";
             if (selectedBuilding != null)
             {
-                commandPrefix += String.Format("/{0}/{1}/{2}/{3}/Cafe:{4}", selectedBuilding.Address.Country,
+                commandPrefix += String.Format("/{0}/{1}/{2}/{3}/{4}", selectedBuilding.Address.Country,
                     selectedBuilding.Address.City, selectedBuilding.Address.Street,
-                    selectedBuilding.Address.NumberOfBuilding, selectedBuilding);
+                    selectedBuilding.Address.NumberOfBuilding, selectedBuilding.Name);
             }
             return commandPrefix + "$  ";
         }
@@ -269,7 +269,7 @@ namespace CafeProject
             }
             else
             {
-                Console.WriteLine("There is no selected building \n");
+                MessageBox.Show("There is no selected building.");
             }
         }
         //Rate
@@ -279,28 +279,20 @@ namespace CafeProject
             {
                 if (currentUser == null)
                 {
-                    Console.WriteLine("Please log in. \n");
+                    MessageBox.Show("Please log in");
                     return;
                 }
                 if (rateLine[0] - '0' > 5 || rateLine[0] - '0' < 1)
                 {
-                    Console.WriteLine("Your rate must be from 1 to 5.");
+                    MessageBox.Show("Your rate must be from 1 to 5.");
                     return;
                 }
                 UserRating rate = new UserRating(currentUser, (Rate)(rateLine[0] - '0'), rateLine.Trim());
                 selectedBuilding.AddRate(rate);
                 return;
             }
-            Console.WriteLine("There is no selected building. \n");
+            MessageBox.Show("There is no selected building.");
         }
-        //cafesInDistance
-        //public static List<Cafe> CafesInDistance(User currentUser, string line)
-        //{
-        //    List<Cafe> searchList = new List<Cafe>();
-
-        //    return searchList;
-        //}
-
         //Nearby
         private static void Nearby(string line, User currentUser, Cafe selectedBuilding)
         {
@@ -316,7 +308,7 @@ namespace CafeProject
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("Incorrect distance!!!");
+                    MessageBox.Show("Incorrect distance!!!");
                     return;
                 }
             }
@@ -332,7 +324,7 @@ namespace CafeProject
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("Write correct distance.");
+                    MessageBox.Show("Write correct distance.");
                 }
             }
             else
@@ -403,12 +395,12 @@ namespace CafeProject
                     return;
                 }
             }
-            Console.WriteLine("Link: ");
+            Console.Write("Link: ");
             var link = Console.ReadLine();
-            Console.WriteLine("Telephone: ");
+            Console.Write("Telephone: ");
             var telephone = Console.ReadLine();
             OpenTimes[] openTimeses = new OpenTimes[7];
-            Console.WriteLine("Set open times automaticly(08:00-20:00)?(Y/n)\n>> ");
+            Console.Write("Set open times automaticly(08:00-20:00)?(Y/n)\n>> ");
             line = Console.ReadLine().ToLower();
             if (line == "n")
             {
@@ -449,11 +441,14 @@ namespace CafeProject
                 line = line.Replace(command.ToString(), "").Trim();
                 if (command == Command.nothing)
                 {
-                    Console.WriteLine("Write correct command!!!\n");
+                    MessageBox.Show("Command is incorrect!!!");
                     continue;
                 }
                 switch (command)
                 {
+                    case Command.allCommands:
+                        PrintAllCommandes();
+                        break;
                     case Command.search:
                         selectedBuilding = Search(line);
                         break;
@@ -499,8 +494,15 @@ namespace CafeProject
                     case Command.changeMyCoordinates:
                         if (currentUser != null)
                         {
-                            currentUser.Coordinates =
-                                new GeoCoordinate(double.Parse(line.Split()[0]), double.Parse(line.Split()[1]));
+                            try
+                            {
+                                currentUser.Coordinates =
+                                    new GeoCoordinate(double.Parse(line.Split()[0]), double.Parse(line.Split()[1]));
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Coordinates is Incorrect!!!");
+                            }
                         }
                         else
                         {
@@ -517,12 +519,11 @@ namespace CafeProject
                         selectedBuilding = null;
                         break;
                 }
-
+                //Users and Cafes JSON serialization
+                File.WriteAllText(buildingPath, JsonConvert.SerializeObject(allCafes));
+                File.WriteAllText(userPath, JsonConvert.SerializeObject(allUsers));
             }
-            Console.WriteLine(deviderTildes);
-            //Users and Cafes JSON serialization
-            File.WriteAllText(buildingPath, JsonConvert.SerializeObject(allCafes));
-            File.WriteAllText(userPath, JsonConvert.SerializeObject(allUsers));
+            Console.WriteLine(deviderTildes + "\n Authors: AnahitMartirosyan, ManeHarutyunyan, SonaTigranyan, HosPogh ;)");
         }
     }
 }
